@@ -1,0 +1,2432 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>visual html</title>
+<link rel="icon" type="image/png" href="app.png">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Tajawal:wght@300;400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0a0d;--surface:#111115;--surface2:#18181e;--surface3:#1f1f28;
+  --border:#252530;--accent:#7c3aed;--accent2:#06d6a0;--danger:#f43f5e;
+  --text:#e2e2f0;--text2:#666;--text3:#999;
+  --panel-w:270px;--right-w:48px;
+  --topbar-h:76px;--pagesbar-h:38px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column;height:100dvh;overflow:hidden;user-select:none;-webkit-tap-highlight-color:transparent;}
+
+/* TOP BAR */
+#topbar{
+  background:var(--surface);border-bottom:1px solid var(--border);
+  display:flex;flex-direction:column;flex-shrink:0;z-index:200;
+  height:var(--topbar-h);
+}
+#topbar-r1,#topbar-r2{
+  height:38px;display:flex;align-items:center;gap:2px;padding:0 8px;
+  overflow-x:auto;overflow-y:hidden;scrollbar-width:none;flex-shrink:0;
+}
+#topbar-r1::-webkit-scrollbar,#topbar-r2::-webkit-scrollbar{display:none;}
+#topbar-r2{border-top:1px solid var(--border);background:var(--surface2);}
+
+.logo{
+  font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:700;
+  color:var(--accent);letter-spacing:.06em;display:flex;align-items:center;gap:6px;
+  margin-right:auto;flex-shrink:0;padding-left:10px;
+}
+.logo img{width:26px;height:26px;border-radius:6px;object-fit:cover;}
+
+.tb-sep{width:1px;height:22px;background:var(--border);margin:0 3px;flex-shrink:0;}
+.tb-btn{display:flex;align-items:center;gap:4px;background:none;border:1px solid transparent;color:var(--text3);padding:3px 7px;border-radius:5px;cursor:pointer;font-size:11px;font-family:'Tajawal',sans-serif;transition:all .12s;white-space:nowrap;flex-shrink:0;}
+.tb-btn:hover{background:var(--surface2);border-color:var(--border);color:var(--text);}
+#topbar-r2 .tb-btn:hover{background:var(--surface3);}
+.tb-btn.on{background:#7c3aed22;border-color:var(--accent);color:var(--accent);}
+
+/* LAYOUT */
+#layout{display:flex;flex:1;overflow:hidden;min-height:0;}
+
+/* PROPS PANEL */
+#left{
+  width:var(--panel-w);background:var(--surface);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;overflow:hidden;flex-shrink:0;
+  transition:transform .25s ease;
+}
+.tabs{
+  display:flex;border-bottom:1px solid var(--border);flex-shrink:0;
+  overflow-x:auto;scrollbar-width:none;
+}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{
+  flex:1;padding:7px 2px;text-align:center;cursor:pointer;
+  font-size:10px;color:var(--text2);border-bottom:2px solid transparent;
+  transition:.15s;white-space:nowrap;min-width:36px;
+}
+.tab.on{color:var(--accent);border-bottom-color:var(--accent);}
+.pane{flex:1;overflow-y:auto;overflow-x:hidden;display:none;}
+.pane.on{display:block;}
+.pane::-webkit-scrollbar{width:3px;}
+.pane::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+.pane-inner{padding:10px;}
+.sec{margin-bottom:14px;}
+.sec-title{font-size:10px;font-weight:700;color:var(--text2);letter-spacing:.1em;text-transform:uppercase;margin-bottom:7px;}
+.field{margin-bottom:7px;}
+.field label{display:block;font-size:10px;color:var(--text2);margin-bottom:3px;}
+.field input,.field select{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 7px;border-radius:5px;font-size:11px;outline:none;font-family:'Tajawal',sans-serif;}
+.field input:focus,.field select:focus{border-color:var(--accent);}
+.field input[type=color]{height:28px;padding:1px 2px;cursor:pointer;}
+.field input[type=range]{padding:0;cursor:pointer;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+
+/* LAYERS */
+.layer-item{display:flex;align-items:center;gap:5px;padding:5px 7px;border-radius:6px;cursor:pointer;border:1px solid transparent;margin-bottom:2px;font-size:11px;transition:.1s;}
+.layer-item:hover{background:var(--surface2);}
+.layer-item.on{background:#7c3aed18;border-color:#7c3aed44;}
+.layer-item.on2{background:#06d6a010;border-color:#06d6a044;}
+.layer-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.layer-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text3);}
+.layer-name.on{color:var(--text);}
+.lbtn{background:none;border:none;color:var(--text2);cursor:pointer;padding:1px 4px;border-radius:3px;font-size:10px;display:flex;align-items:center;}
+.lbtn:hover{color:var(--text);background:var(--surface3);}
+
+/* CENTER */
+#center{flex:1;background:var(--bg);display:flex;flex-direction:column;align-items:stretch;position:relative;overflow:hidden;min-width:0;}
+#canvas-area{flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;}
+#canvas-wrap{position:relative;transform-origin:center center;}
+#canvas{width:880px;height:580px;background:#ffffff;position:relative;overflow:hidden;box-shadow:0 0 0 1px #2a2a40,0 24px 80px rgba(0,0,0,.7);}
+#canvas.dark-cv{background:#1a1a2e;}
+#grid-cv{position:absolute;inset:0;pointer-events:none;z-index:1;}
+#sel-box{position:absolute;border:1.5px solid var(--accent2);background:#06d6a00d;pointer-events:none;z-index:90;display:none;}
+
+/* ZOOM */
+#zoombar{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:10px;color:var(--text2);font-family:'IBM Plex Mono',monospace;display:flex;align-items:center;gap:8px;z-index:10;}
+#zoombar button{background:none;border:none;color:var(--text2);cursor:pointer;font-size:13px;padding:0 2px;}
+#zoombar button:hover{color:var(--text);}
+
+/* ══════════════════════════════
+   PAGES BAR
+══════════════════════════════ */
+#pages-bar{
+  height:var(--pagesbar-h);
+  background:var(--surface);
+  border-top:1px solid var(--border);
+  display:flex;align-items:center;
+  gap:0;
+  padding:0 8px;
+  overflow-x:auto;
+  overflow-y:hidden;
+  scrollbar-width:thin;
+  scrollbar-color:var(--border) transparent;
+  flex-shrink:0;
+  position:relative;
+}
+#pages-bar::-webkit-scrollbar{height:3px;}
+#pages-bar::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+
+.page-tab{
+  display:flex;align-items:center;gap:5px;
+  padding:0 10px;height:26px;
+  border-radius:6px;cursor:pointer;
+  font-size:11px;color:var(--text3);
+  border:1px solid transparent;
+  white-space:nowrap;flex-shrink:0;
+  transition:all .12s;
+  position:relative;
+  font-family:'Tajawal',sans-serif;
+}
+.page-tab:hover{background:var(--surface2);color:var(--text);}
+.page-tab.active{
+  background:#7c3aed22;
+  border-color:var(--accent);
+  color:var(--accent);
+  font-weight:700;
+}
+.page-tab .page-num{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:9px;
+  color:var(--text2);
+  background:var(--surface3);
+  padding:1px 4px;
+  border-radius:3px;
+}
+.page-tab.active .page-num{
+  background:#7c3aed44;
+  color:var(--accent);
+}
+.page-tab .page-close{
+  width:14px;height:14px;border-radius:3px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;color:var(--text2);
+  opacity:0;transition:opacity .12s;
+  background:none;border:none;cursor:pointer;
+  padding:0;
+}
+.page-tab:hover .page-close{opacity:1;}
+.page-tab .page-close:hover{background:var(--danger);color:#fff;}
+
+#page-add-btn{
+  width:26px;height:26px;border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  background:none;border:1px dashed var(--border);
+  color:var(--text2);cursor:pointer;font-size:16px;
+  transition:.12s;flex-shrink:0;margin-right:6px;
+}
+#page-add-btn:hover{background:var(--surface2);border-color:var(--accent);color:var(--accent);}
+
+.pages-label{
+  font-size:10px;color:var(--text2);
+  font-family:'IBM Plex Mono',monospace;
+  margin-left:auto;padding-left:10px;
+  flex-shrink:0;white-space:nowrap;
+}
+
+/* page rename input */
+.page-tab input.page-rename{
+  background:transparent;border:none;outline:none;
+  color:var(--accent);font-size:11px;font-family:'Tajawal',sans-serif;
+  font-weight:700;width:80px;cursor:text;
+  padding:0;
+}
+
+/* LEFT TOOLBAR */
+#right{width:var(--right-w);background:var(--surface);border-left:1px solid var(--border);display:flex;flex-direction:column;align-items:center;padding:6px 4px;gap:3px;flex-shrink:0;overflow-y:auto;scrollbar-width:none;}
+#right::-webkit-scrollbar{display:none;}
+.tool{width:38px;height:38px;border-radius:8px;background:none;border:1px solid transparent;color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;transition:.12s;flex-shrink:0;}
+.tool:hover{background:var(--surface2);color:var(--text);}
+.tool.on{background:#7c3aed22;border-color:var(--accent);color:var(--accent);}
+.tool.red{color:var(--danger);}
+.tool-sep{width:26px;height:1px;background:var(--border);margin:3px 0;}
+
+/* MOBILE */
+#mob-panel-btn{display:none;}
+#left-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:149;}
+
+@media(max-width:768px){
+  :root{--panel-w:82vw;--right-w:44px;--topbar-h:76px;}
+  #left{position:fixed;top:var(--topbar-h);bottom:0;right:0;z-index:150;transform:translateX(110%);width:var(--panel-w) !important;box-shadow:-6px 0 30px rgba(0,0,0,.6);}
+  #left.open{transform:translateX(0);}
+  #left-overlay.open{display:block;}
+  #mob-panel-btn{display:flex;}
+  #topbar-r1,#topbar-r2{gap:1px;padding:0 5px;}
+  .tb-btn{font-size:10px;padding:3px 5px;gap:2px;}
+  .tb-btn .tb-label{display:none;}
+  #canvas-wrap{transform-origin:top center !important;}
+  #hashStatus{display:none;}
+  #comp-drawer{width:88vw !important;left:0 !important;right:auto !important;}
+}
+@media(max-width:480px){
+  :root{--right-w:40px;}
+  .tool{width:32px;height:32px;}
+  .mi.lg{font-size:18px;}
+  #topbar-r1,#topbar-r2{gap:0;padding:0 3px;}
+}
+
+/* ELEMENTS */
+.el{position:absolute;display:flex;align-items:center;justify-content:center;cursor:move;min-width:4px;min-height:4px;}
+.el.sel{outline:2px solid var(--accent);outline-offset:1px;}
+.el.msel{outline:2px solid var(--accent2);outline-offset:1px;}
+
+/* HANDLES */
+.h{position:absolute;width:8px;height:8px;background:#fff;border:2px solid var(--accent);border-radius:2px;z-index:30;}
+.h-nw{top:-5px;right:-5px;cursor:nwse-resize;}
+.h-ne{top:-5px;left:-5px;cursor:nesw-resize;}
+.h-sw{bottom:-5px;right:-5px;cursor:nesw-resize;}
+.h-se{bottom:-5px;left:-5px;cursor:nwse-resize;}
+.h-n{top:-5px;left:50%;transform:translateX(-50%);cursor:ns-resize;}
+.h-s{bottom:-5px;left:50%;transform:translateX(-50%);cursor:ns-resize;}
+.h-e{right:-5px;top:50%;transform:translateY(-50%);cursor:ew-resize;}
+.h-w{left:-5px;top:50%;transform:translateY(-50%);cursor:ew-resize;}
+.h-rot{position:absolute;top:-24px;left:50%;transform:translateX(-50%);width:10px;height:10px;background:var(--accent2);border:2px solid #fff;border-radius:50%;cursor:grab;z-index:30;}
+.h-rot::before{content:'';position:absolute;top:10px;left:50%;transform:translateX(-50%);width:1px;height:10px;background:var(--accent2);}
+
+.mi{font-family:'Material Icons Round';font-size:18px;font-style:normal;line-height:1;vertical-align:middle;user-select:none;}
+.mi.sm{font-size:14px;}
+.mi.lg{font-size:22px;}
+.snapH,.snapV{position:absolute;pointer-events:none;z-index:50;}
+.snapH{width:100%;height:1px;background:#f43f5e88;left:0;}
+.snapV{height:100%;width:1px;background:#f43f5e88;top:0;}
+.snapH.smart,.snapV.smart{background:#f43f5e;box-shadow:0 0 4px #f43f5e;}
+.snapV.smart-c{background:#06d6a0;box-shadow:0 0 4px #06d6a0;}
+.snapH.smart-c{background:#06d6a0;box-shadow:0 0 4px #06d6a0;}
+
+/* Layer drag */
+.layer-item.dragging{opacity:.4;}
+.layer-item.drop-above{box-shadow:inset 0 2px 0 0 var(--accent);}
+.layer-item.drop-below{box-shadow:inset 0 -2px 0 0 var(--accent);}
+.layer-grip{cursor:grab;color:var(--text2);font-size:12px;padding:0 2px;}
+.layer-grip:active{cursor:grabbing;}
+
+/* Comments panel */
+.cmt-item{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:8px;margin-bottom:6px;font-size:11px;color:var(--text);line-height:1.6;position:relative;}
+.cmt-item .cmt-meta{font-size:9px;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:4px;}
+.cmt-item .cmt-del{background:none;border:none;color:var(--danger);cursor:pointer;padding:0;font-size:11px;}
+.cmt-input{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:6px 8px;border-radius:5px;font-size:11px;font-family:'Tajawal',sans-serif;outline:none;resize:vertical;min-height:54px;}
+.cmt-tag{display:inline-block;background:#7c3aed22;color:var(--accent);padding:1px 6px;border-radius:8px;font-size:9px;margin-right:4px;}
+
+/* Export modal */
+#exp-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:920;align-items:center;justify-content:center;}
+#exp-modal.show{display:flex;}
+.exp-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;width:420px;max-width:96vw;padding:18px;}
+.exp-opt{display:flex;gap:10px;padding:10px;border:1px solid var(--border);border-radius:8px;margin-bottom:6px;cursor:pointer;transition:.12s;background:var(--surface2);}
+.exp-opt:hover{border-color:var(--accent);background:var(--surface3);}
+.exp-opt.on{border-color:var(--accent);background:#7c3aed22;}
+.exp-opt .exp-ico{font-size:22px;}
+.exp-opt .exp-tit{font-size:12px;font-weight:700;color:var(--text);}
+.exp-opt .exp-desc{font-size:10px;color:var(--text2);line-height:1.5;margin-top:2px;}
+
+/* COMPONENT DRAWER */
+.comp-cat{padding:8px 12px;font-size:11px;cursor:pointer;color:var(--text2);border-bottom:2px solid transparent;white-space:nowrap;transition:.12s;flex-shrink:0;}
+.comp-cat:hover{color:var(--text);}
+.comp-cat.on{color:var(--accent);border-bottom-color:var(--accent);}
+.comp-card{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 8px;cursor:pointer;transition:all .15s;text-align:center;display:flex;flex-direction:column;align-items:center;gap:5px;}
+.comp-card:hover{background:var(--surface3);border-color:var(--accent);transform:translateY(-1px);}
+.comp-card .comp-icon{font-size:22px;line-height:1;}
+.comp-card .comp-preview{width:100%;min-height:36px;background:#fff;border-radius:5px;overflow:hidden;display:flex;align-items:center;justify-content:center;padding:4px;pointer-events:none;}
+.comp-card .comp-label{font-size:10px;color:var(--text2);font-weight:600;}
+
+/* CONTEXT */
+#ctx{position:fixed;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:4px;z-index:1000;min-width:140px;box-shadow:0 10px 30px rgba(0,0,0,.6);display:none;}
+.ci{padding:6px 10px;cursor:pointer;border-radius:5px;font-size:11px;display:flex;align-items:center;gap:7px;color:var(--text3);}
+.ci:hover{background:var(--surface2);color:var(--text);}
+.ci.red{color:var(--danger);}
+.ci.red:hover{background:#f43f5e11;}
+.csep{height:1px;background:var(--border);margin:3px 0;}
+
+/* TOAST */
+#toast{position:fixed;bottom:24px;right:50%;transform:translateX(50%);background:var(--surface3);border:1px solid var(--border);padding:6px 16px;border-radius:20px;font-size:11px;color:var(--text3);z-index:2000;opacity:0;transition:opacity .2s;pointer-events:none;}
+#toast.show{opacity:1;}
+
+/* PREVIEW */
+#prev{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:800;display:none;align-items:center;justify-content:center;}
+#prev.show{display:flex;}
+#prev-inner{position:relative;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 40px 120px rgba(0,0,0,.9);}
+#prev-close{position:absolute;top:8px;right:8px;background:#0007;border:none;color:#fff;border-radius:50%;width:28px;height:28px;font-size:16px;cursor:pointer;z-index:10;}
+
+/* PREVIEW PAGES NAV */
+#prev-pages-nav{
+  position:absolute;bottom:0;left:0;right:0;
+  background:rgba(0,0,0,.6);backdrop-filter:blur(8px);
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  padding:6px 12px;z-index:20;
+}
+.prev-page-btn{
+  padding:3px 12px;border-radius:6px;font-size:11px;font-family:'Tajawal',sans-serif;
+  background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);
+  color:#fff;cursor:pointer;transition:.12s;
+}
+.prev-page-btn:hover{background:rgba(255,255,255,.25);}
+.prev-page-btn.active{background:var(--accent);border-color:var(--accent);}
+#prev-page-arrows{display:flex;align-items:center;gap:4px;}
+#prev-page-arrows button{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:6px;width:28px;height:28px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;}
+#prev-page-arrows button:hover{background:rgba(255,255,255,.3);}
+
+/* DEV */
+#pane-dev{display:none;flex-direction:column;overflow:hidden;}
+#pane-dev.on{display:flex;}
+#code{flex:1;background:#070709;color:#a78bfa;padding:10px;font-size:10.5px;font-family:'IBM Plex Mono',monospace;resize:none;border:none;outline:none;line-height:1.7;min-height:400px;}
+.dev-footer{padding:7px 8px;border-top:1px solid var(--border);display:flex;gap:5px;flex-shrink:0;}
+
+/* ANIMATIONS */
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes bounce{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* page tab drag indicator */
+.page-tab.drag-over{border-color:var(--accent2) !important;background:#06d6a011 !important;}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div id="topbar">
+  <div id="topbar-r1">
+    <button id="mob-panel-btn" title="الخصائص"><i class="mi">tune</i></button>
+    <button class="tb-btn" id="undoBtn"><i class="mi">undo</i><span class="tb-label"> تراجع</span></button>
+    <button class="tb-btn" id="redoBtn"><i class="mi">redo</i><span class="tb-label"> إعادة</span></button>
+    <div class="tb-sep"></div>
+    <button class="tb-btn" id="snapBtn"><i class="mi">grid_4x4</i><span class="tb-label"> Snap</span></button>
+    <button class="tb-btn" id="gridBtn"><i class="mi">grid_on</i><span class="tb-label"> شبكة</span></button>
+    <div class="tb-sep"></div>
+    <button class="tb-btn" id="groupBtn"><i class="mi">group_work</i><span class="tb-label"> تجميع</span></button>
+    <button class="tb-btn" id="ungroupBtn"><i class="mi">ungroup</i><span class="tb-label"> فك</span></button>
+    <div class="tb-sep"></div>
+    <button class="tb-btn" id="darkCvBtn"><i class="mi">contrast</i><span class="tb-label"> كنفاس</span></button>
+    <div class="tb-sep"></div>
+    <button class="tb-btn" id="copyHashBtn"><i class="mi">link</i><span class="tb-label"> نسخ الرابط</span></button>
+    <button class="tb-btn" id="clearHashBtn"><i class="mi">delete_sweep</i><span class="tb-label"> مسح</span></button>
+    <span id="hashStatus" style="font-size:10px;color:var(--text2);font-family:'IBM Plex Mono',monospace;white-space:nowrap;padding:0 4px;">○</span>
+    <span class="logo" style="margin-right:auto;margin-left:6px;">
+      visual html
+      <img src="app.png" style="width:26px;height:26px;border-radius:6px;object-fit:cover;">
+    </span>
+  </div>
+  <div id="topbar-r2">
+    <span style="font-size:10px;color:var(--text2);margin-left:2px;flex-shrink:0;" class="tb-label">محاذاة:</span>
+    <button class="tb-btn" id="alL" title="محاذاة يسار"><i class="mi">align_horizontal_left</i><span class="tb-label"> يسار</span></button>
+    <button class="tb-btn" id="alC" title="توسيط أفقي"><i class="mi">align_horizontal_center</i><span class="tb-label"> وسط</span></button>
+    <button class="tb-btn" id="alR" title="محاذاة يمين"><i class="mi">align_horizontal_right</i><span class="tb-label"> يمين</span></button>
+    <button class="tb-btn" id="alT" title="محاذاة أعلى"><i class="mi">align_vertical_top</i><span class="tb-label"> أعلى</span></button>
+    <button class="tb-btn" id="alM" title="توسيط رأسي"><i class="mi">align_vertical_center</i><span class="tb-label"> منتصف</span></button>
+    <button class="tb-btn" id="alB" title="محاذاة أسفل"><i class="mi">align_vertical_bottom</i><span class="tb-label"> أسفل</span></button>
+    <div class="tb-sep"></div>
+    <span style="font-size:10px;color:var(--text2);flex-shrink:0;" class="tb-label">تصدير:</span>
+    <button class="tb-btn" id="prevBtn" style="background:#145214;border-color:#1a7a1a;color:#fff;padding:4px 14px 4px 10px;border-radius:10px;font-size:13px;font-weight:700;gap:8px;"><span style="color:#00ff44;font-size:16px;">▶</span><span class="tb-label"> المعاينة</span></button>
+    <button class="tb-btn" id="exportHTMLBtn"><i class="mi">code</i><span class="tb-label"> HTML</span></button>
+    <button class="tb-btn" id="exportJSONBtn"><i class="mi">download</i><span class="tb-label"> JSON</span></button>
+    <button class="tb-btn" id="importJSONBtn"><i class="mi">upload</i><span class="tb-label"> فتح JSON</span></button>
+    <input type="file" id="jsonFile" accept=".json" style="display:none">
+  </div>
+</div>
+
+<!-- MOBILE OVERLAY -->
+<div id="left-overlay"></div>
+
+<!-- LAYOUT -->
+<div id="layout">
+
+<!-- LEFT PROPS PANEL -->
+<div id="left">
+  <div class="tabs">
+    <div class="tab on" data-pane="pane-props">خصائص</div>
+    <div class="tab" data-pane="pane-layers">طبقات</div>
+    <div class="tab" data-pane="pane-events">أحداث</div>
+    <div class="tab" data-pane="pane-comments">💬 تعليقات</div>
+    <div class="tab" data-pane="pane-canvas">كنفاس</div>
+    <div class="tab" data-pane="pane-anim">حركة</div>
+    <div class="tab" data-pane="pane-dev">JSON</div>
+  </div>
+
+  <!-- PROPS -->
+  <div class="pane on" id="pane-props">
+    <div class="pane-inner">
+      <div id="no-sel" style="color:var(--text2);font-size:11px;text-align:center;padding:30px 0;line-height:2;">
+        🖱 انقر على عنصر<br>أو أضف من الشريط الجانبي
+      </div>
+      <div id="props-form" style="display:none">
+        <div class="sec">
+          <div class="sec-title">المحتوى</div>
+          <div class="field"><label>النص</label><input type="text" id="fText"></div>
+          <div class="field" id="imgField" style="display:none"><label>رابط الصورة</label><input type="text" id="fImg"></div>
+        </div>
+        <div class="sec">
+          <div class="sec-title">الموقع والحجم</div>
+          <div class="row2">
+            <div class="field"><label>X</label><input type="number" id="fX"></div>
+            <div class="field"><label>Y</label><input type="number" id="fY"></div>
+          </div>
+          <div class="row2">
+            <div class="field"><label>العرض</label><input type="number" id="fW"></div>
+            <div class="field"><label>الارتفاع</label><input type="number" id="fH"></div>
+          </div>
+          <div class="field"><label>دوران °</label><input type="number" id="fRot"></div>
+        </div>
+        <div class="sec">
+          <div class="sec-title">الشكل</div>
+          <div class="row2">
+            <div class="field"><label>الخلفية</label><input type="color" id="fBg"></div>
+            <div class="field"><label>لون الخط</label><input type="color" id="fColor"></div>
+          </div>
+          <div class="row2">
+            <div class="field"><label>حجم الخط</label><input type="number" id="fFS"></div>
+            <div class="field"><label>الحواف</label><input type="number" id="fRad"></div>
+          </div>
+          <div class="field"><label>الشفافية</label><input type="range" id="fOp" min="0" max="1" step="0.01"></div>
+          <div class="field"><label>الظل</label>
+            <select id="fShad">
+              <option value="">بدون</option>
+              <option value="0 2px 8px rgba(0,0,0,.2)">خفيف</option>
+              <option value="0 4px 20px rgba(0,0,0,.4)">متوسط</option>
+              <option value="0 8px 40px rgba(0,0,0,.6)">قوي</option>
+              <option value="0 0 0 3px #7c3aed55,0 4px 20px rgba(124,58,237,.3)">توهج بنفسجي</option>
+              <option value="0 0 0 3px #06d6a055,0 4px 20px rgba(6,214,160,.3)">توهج أخضر</option>
+            </select>
+          </div>
+          <div class="field"><label>الحد</label>
+            <select id="fBorder">
+              <option value="">بدون</option>
+              <option value="1px solid #333">رفيع داكن</option>
+              <option value="2px solid #7c3aed">بنفسجي</option>
+              <option value="2px solid #06d6a0">أخضر</option>
+              <option value="2px dashed #666">منقط</option>
+              <option value="2px solid #f43f5e">أحمر</option>
+            </select>
+          </div>
+          <div class="field"><label>النوع</label>
+            <select id="fType">
+              <option value="rect">مستطيل</option>
+              <option value="circle">دائرة</option>
+              <option value="text">نص</option>
+              <option value="image">صورة</option>
+              <option value="line">خط</option>
+              <option value="html">HTML مخصص</option>
+            </select>
+          </div>
+          <div class="field" id="editHtmlField" style="display:none;">
+            <button id="editHtmlBtn" class="tb-btn" style="width:100%;justify-content:center;background:#f59e0b22;border-color:#f59e0b;color:#f59e0b;"><i class="mi sm">code</i> تعديل HTML</button>
+          </div>
+        </div>
+        <div class="sec">
+          <div class="sec-title">CSS مخصص للعنصر</div>
+          <div class="field"><label>اكتب CSS خام (يُطبَّق كما هو)</label>
+            <textarea id="fCustomCss" rows="3" placeholder="مثال:&#10;background: linear-gradient(45deg,#f00,#00f);&#10;letter-spacing: 2px;&#10;text-transform: uppercase;" style="width:100%;background:#070709;color:#a78bfa;border:1px solid var(--border);border-radius:5px;padding:6px 8px;font-size:11px;font-family:'IBM Plex Mono',monospace;outline:none;resize:vertical;line-height:1.6;"></textarea>
+          </div>
+          <div style="font-size:9px;color:var(--text2);line-height:1.5;">💡 يتم تطبيقه فوق كل الأنماط الأخرى. يدعم gradient, transitions, filters…</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LAYERS -->
+  <div class="pane" id="pane-layers">
+    <div class="pane-inner">
+      <div id="layers-list"></div>
+    </div>
+  </div>
+
+  <!-- EVENTS -->
+  <div class="pane" id="pane-events">
+    <div class="pane-inner">
+      <div id="no-sel-ev" style="color:var(--text2);font-size:11px;text-align:center;padding:30px 0;line-height:2;">حدد عنصراً<br>لإضافة أحداث</div>
+      <div id="events-form" style="display:none">
+        <div class="sec">
+          <div class="sec-title">عند الضغط (onClick)</div>
+          <div class="field"><label>نوع الحدث</label>
+            <select id="evClickType">
+              <option value="">— لا شيء —</option>
+              <option value="alert">رسالة تنبيه</option>
+              <option value="link">فتح رابط</option>
+              <option value="toggleEl">إخفاء/إظهار عنصر</option>
+              <option value="changeColor">تغيير لون</option>
+              <option value="gotoPage">الانتقال لصفحة</option>
+              <option value="custom">كود JavaScript</option>
+            </select>
+          </div>
+          <div class="field" id="evClickValWrap"><label id="evClickValLabel">القيمة</label><input type="text" id="evClickVal" placeholder="مثال: https://google.com"></div>
+        </div>
+        <div class="sec">
+          <div class="sec-title">عند تمرير الماوس (onHover)</div>
+          <div class="field"><label>نوع الحدث</label>
+            <select id="evHoverType">
+              <option value="">— لا شيء —</option>
+              <option value="tooltip">ظهور تلميح</option>
+              <option value="scaleUp">تكبير</option>
+              <option value="glow">توهج</option>
+              <option value="changeText">تغيير النص</option>
+              <option value="custom">كود JavaScript</option>
+            </select>
+          </div>
+          <div class="field" id="evHoverValWrap"><label id="evHoverValLabel">القيمة</label><input type="text" id="evHoverVal" placeholder="مثال: مرحباً بك!"></div>
+        </div>
+        <button class="tb-btn" id="applyEvBtn" style="width:100%;justify-content:center;margin-top:4px;"><i class="mi sm">bolt</i> تطبيق الأحداث</button>
+        <div style="margin-top:10px;padding:8px;background:var(--surface2);border-radius:6px;font-size:10px;color:var(--text2);line-height:1.7;">
+          💡 الأحداث تظهر في وضع المعاينة ▶<br>
+          استخدم "الانتقال لصفحة" لربط الصفحات معاً<br>
+          في الكنفاس: تحريك وتعديل فقط
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMMENTS / AI COMMANDS -->
+  <div class="pane" id="pane-comments">
+    <div class="pane-inner">
+      <div class="sec">
+        <div class="sec-title">قائمة الأوامر والتعليقات</div>
+        <div style="font-size:10px;color:var(--text2);line-height:1.6;margin-bottom:8px;">
+          اكتب وصف ما تريد تنفيذه بلغتك الطبيعية. مفيد لتنظيم أفكارك أو لإعطائها للذكاء الاصطناعي لاحقاً.<br>
+          مثال: <span class="cmt-tag">@AI</span> اعمل زر يغير لونه عند الضغط
+        </div>
+        <textarea id="cmtInput" class="cmt-input" placeholder="اكتب أمراً أو ملاحظة... (Ctrl+Enter للحفظ)"></textarea>
+        <div style="display:flex;gap:6px;margin-top:6px;">
+          <button class="tb-btn" id="cmtAddBtn" style="flex:1;justify-content:center;background:var(--accent);color:#fff;border-color:var(--accent);"><i class="mi sm">add</i> إضافة</button>
+          <button class="tb-btn" id="cmtAIBtn" title="إضافة كأمر للذكاء الاصطناعي"><i class="mi sm">auto_awesome</i> @AI</button>
+          <button class="tb-btn" id="cmtCopyAllBtn" title="نسخ كل الأوامر"><i class="mi sm">content_copy</i></button>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sec-title">المحفوظة (<span id="cmtCount">0</span>)</div>
+        <div id="cmt-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CANVAS SETTINGS -->
+  <div class="pane" id="pane-canvas">
+    <div class="pane-inner">
+      <div class="sec">
+        <div class="sec-title">حجم الكنفاس</div>
+        <div class="row2">
+          <div class="field"><label>العرض (px)</label><input type="number" id="cvW" value="880" min="100" max="3000"></div>
+          <div class="field"><label>الارتفاع (px)</label><input type="number" id="cvH" value="580" min="100" max="3000"></div>
+        </div>
+        <div class="field"><label>أحجام جاهزة</label>
+          <select id="cvPreset">
+            <option value="">— اختر حجماً —</option>
+            <option value="1920,1080">Full HD — 1920×1080</option>
+            <option value="1280,720">HD — 1280×720</option>
+            <option value="880,580">افتراضي — 880×580</option>
+            <option value="390,844">iPhone 14 — 390×844</option>
+            <option value="768,1024">iPad — 768×1024</option>
+            <option value="1024,768">iPad أفقي — 1024×768</option>
+            <option value="800,600">800×600</option>
+            <option value="1200,630">Open Graph — 1200×630</option>
+            <option value="1080,1080">Instagram — 1080×1080</option>
+          </select>
+        </div>
+        <button class="tb-btn" id="applyCvSizeBtn" style="width:100%;justify-content:center;"><i class="mi sm">aspect_ratio</i> تطبيق الحجم</button>
+      </div>
+      <div class="sec">
+        <div class="sec-title">خلفية الكنفاس</div>
+        <div class="field"><label>لون مخصص</label><input type="color" id="cvBgColor" value="#ffffff"></div>
+        <div class="field"><label>خلفيات جاهزة</label>
+          <select id="cvBgPreset">
+            <option value="">— اختر —</option>
+            <option value="#ffffff">أبيض</option>
+            <option value="#000000">أسود</option>
+            <option value="#1a1a2e">داكن أزرق</option>
+            <option value="#0f172a">سليت داكن</option>
+            <option value="#fafaf9">كريمي فاتح</option>
+            <option value="#f0f4ff">أزرق فاتح</option>
+            <option value="linear-gradient(135deg,#667eea,#764ba2)">تدرج بنفسجي</option>
+            <option value="linear-gradient(135deg,#f093fb,#f5576c)">تدرج وردي</option>
+            <option value="linear-gradient(135deg,#4facfe,#00f2fe)">تدرج أزرق</option>
+            <option value="linear-gradient(135deg,#43e97b,#38f9d7)">تدرج أخضر</option>
+          </select>
+        </div>
+        <button class="tb-btn" id="applyCvBgBtn" style="width:100%;justify-content:center;"><i class="mi sm">palette</i> تطبيق الخلفية</button>
+      </div>
+      <div class="sec">
+        <div class="sec-title">معلومات</div>
+        <div style="font-size:10px;color:var(--text2);line-height:1.8;">
+          <div>الحجم الحالي: <span id="cvInfoSize" style="color:var(--text);">880 × 580</span></div>
+          <div>عدد العناصر: <span id="cvInfoCount" style="color:var(--text);">0</span></div>
+          <div>الخلفية: <span id="cvInfoBg" style="color:var(--text);">#ffffff</span></div>
+          <div>عدد الصفحات: <span id="cvInfoPages" style="color:var(--text);">1</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ANIM -->
+  <div class="pane" id="pane-anim">
+    <div class="pane-inner">
+      <div id="no-sel-anim" style="color:var(--text2);font-size:11px;text-align:center;padding:30px 0;">حدد عنصراً أولاً</div>
+      <div id="anim-form" style="display:none">
+        <div class="sec">
+          <div class="sec-title">الحركة</div>
+          <div class="field"><label>نوع الحركة</label>
+            <select id="aType">
+              <option value="">بدون</option>
+              <option value="fadeIn">ظهور تدريجي</option>
+              <option value="slideIn">انزلاق</option>
+              <option value="bounce">ارتداد</option>
+              <option value="spin">دوران</option>
+              <option value="pulse">نبض</option>
+            </select>
+          </div>
+          <div class="row2">
+            <div class="field"><label>المدة (ث)</label><input type="number" id="aDur" value="1" min="0.1" step="0.1"></div>
+            <div class="field"><label>تأخير (ث)</label><input type="number" id="aDelay" value="0" min="0" step="0.1"></div>
+          </div>
+          <div class="field"><label>التكرار</label>
+            <select id="aIter">
+              <option value="1">مرة</option>
+              <option value="2">مرتان</option>
+              <option value="3">3 مرات</option>
+              <option value="infinite">لانهاية</option>
+            </select>
+          </div>
+          <button class="tb-btn" id="applyAnimBtn" style="width:100%;margin-top:6px;justify-content:center;"><i class="mi sm">animation</i> تطبيق الحركة</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEV -->
+  <div id="pane-dev" style="flex-direction:column;overflow:hidden;flex:1;">
+    <textarea id="code" spellcheck="false"></textarea>
+    <div class="dev-footer">
+      <button class="tb-btn" id="applyCodeBtn" style="flex:1">💾 تطبيق</button>
+      <button class="tb-btn" id="fmtCodeBtn">✨ تنسيق</button>
+    </div>
+  </div>
+
+</div><!-- /left -->
+
+<!-- CENTER -->
+<div id="center">
+  <div id="canvas-area">
+    <div id="canvas-wrap">
+      <div id="canvas">
+        <canvas id="grid-cv"></canvas>
+        <div id="sel-box"></div>
+      </div>
+    </div>
+    <div id="zoombar">
+      <button id="zoomOut">−</button>
+      <span id="zoomLabel">100%</span>
+      <button id="zoomIn">+</button>
+      <button id="zoomReset">↺</button>
+    </div>
+  </div>
+
+  <!-- PAGES BAR -->
+  <div id="pages-bar">
+    <button id="page-add-btn" title="إضافة صفحة جديدة">+</button>
+    <div id="pages-tabs-wrap" style="display:flex;align-items:center;gap:3px;flex:1;overflow-x:auto;scrollbar-width:none;">
+      <!-- page tabs injected here -->
+    </div>
+    <span class="pages-label" id="pages-label">صفحة 1 / 1</span>
+  </div>
+</div>
+
+<!-- RIGHT TOOLBAR -->
+<div id="right">
+  <button class="tool on" id="t-sel" title="تحديد (V)"><i class="mi lg">near_me</i></button>
+  <div class="tool-sep"></div>
+  <button class="tool" id="t-rect" title="مستطيل (R)"><i class="mi lg">rectangle</i></button>
+  <button class="tool" id="t-circ" title="دائرة (C)"><i class="mi lg">circle</i></button>
+  <button class="tool" id="t-text" title="نص (T)"><i class="mi lg">title</i></button>
+  <button class="tool" id="t-img" title="صورة (I)"><i class="mi lg">image</i></button>
+  <button class="tool" id="t-line" title="خط (L)"><i class="mi lg">horizontal_rule</i></button>
+  <button class="tool" id="t-html" title="HTML مخصص" style="color:#f59e0b;"><i class="mi lg">code</i></button>
+  <div class="tool-sep"></div>
+  <button class="tool" id="t-components" title="مكونات UI جاهزة"><i class="mi lg">widgets</i></button>
+  <div class="tool-sep"></div>
+  <button class="tool" id="t-dup" title="نسخ (Ctrl+D)"><i class="mi lg">content_copy</i></button>
+  <button class="tool red" id="t-del" title="حذف (Del)"><i class="mi lg">delete</i></button>
+  <div class="tool-sep"></div>
+  <button class="tool" id="t-fwd" title="للأمام"><i class="mi lg">flip_to_front</i></button>
+  <button class="tool" id="t-bwd" title="للخلف"><i class="mi lg">flip_to_back</i></button>
+</div>
+
+<!-- COMPONENTS DRAWER -->
+<div id="comp-drawer" style="
+  display:none;position:fixed;top:42px;left:var(--right-w);bottom:0;
+  width:320px;background:var(--surface);border-left:1px solid var(--border);
+  z-index:150;flex-direction:column;overflow:hidden;
+  box-shadow:-4px 0 20px rgba(0,0,0,.4);
+">
+  <div style="padding:12px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;">
+    <i class="mi" style="color:var(--accent);">widgets</i>
+    <span style="font-size:12px;font-weight:700;">مكونات جاهزة</span>
+    <button id="comp-close" style="margin-left:auto;background:none;border:none;color:var(--text2);cursor:pointer;display:flex;align-items:center;"><i class="mi">close</i></button>
+  </div>
+  <div style="display:flex;gap:0;border-bottom:1px solid var(--border);overflow-x:auto;flex-shrink:0;" id="comp-cats">
+    <div class="comp-cat on" data-cat="forms">📝 نماذج</div>
+    <div class="comp-cat" data-cat="ui">🎨 UI</div>
+    <div class="comp-cat" data-cat="layout">📐 تخطيط</div>
+    <div class="comp-cat" data-cat="media">🎬 وسائط</div>
+    <div class="comp-cat" data-cat="nav">🧭 تنقل</div>
+  </div>
+  <div id="comp-grid" style="flex:1;overflow-y:auto;padding:10px;display:grid;grid-template-columns:1fr 1fr;gap:8px;"></div>
+</div>
+
+</div><!-- /layout -->
+
+<!-- CONTEXT MENU -->
+<div id="ctx">
+  <div class="ci" id="ci-dup"><i class="mi sm">content_copy</i> نسخ</div>
+  <div class="ci" id="ci-copy-page"><i class="mi sm">file_copy</i> نسخ للصفحة...</div>
+  <div class="ci" id="ci-grp"><i class="mi sm">group_work</i> تجميع</div>
+  <div class="ci" id="ci-ungrp"><i class="mi sm">ungroup</i> فك التجميع</div>
+  <div class="csep"></div>
+  <div class="ci" id="ci-fwd"><i class="mi sm">flip_to_front</i> للأمام</div>
+  <div class="ci" id="ci-bwd"><i class="mi sm">flip_to_back</i> للخلف</div>
+  <div class="csep"></div>
+  <div class="ci red" id="ci-del"><i class="mi sm">delete</i> حذف</div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<!-- EXPORT OPTIONS MODAL -->
+<div id="exp-modal">
+  <div class="exp-card">
+    <div style="font-size:14px;font-weight:700;margin-bottom:4px;">تصدير HTML</div>
+    <div style="font-size:10px;color:var(--text2);margin-bottom:12px;">اختر طريقة التخطيط في الكود المُصدَّر</div>
+    <div class="exp-opt on" data-mode="absolute"><div class="exp-ico">📍</div><div><div class="exp-tit">Position Absolute (دقيق)</div><div class="exp-desc">يحافظ على المواقع البكسلية بالضبط. الأفضل للتصاميم الثابتة (Desktop).</div></div></div>
+    <div class="exp-opt" data-mode="flex"><div class="exp-ico">📐</div><div><div class="exp-tit">Flexbox (Responsive)</div><div class="exp-desc">يرتب العناصر عمودياً مع flex-wrap. متجاوب مع الهواتف.</div></div></div>
+    <div class="exp-opt" data-mode="grid"><div class="exp-ico">🔲</div><div><div class="exp-tit">CSS Grid (متجاوب)</div><div class="exp-desc">شبكة 12 عمود متجاوبة. عناصر تتموضع تلقائياً.</div></div></div>
+    <div class="exp-opt" data-mode="responsive"><div class="exp-ico">📱</div><div><div class="exp-tit">متجاوب ذكي (Mobile-first)</div><div class="exp-desc">يحول الأبعاد لنسب % و vw. مناسب للجوال.</div></div></div>
+    <div style="display:flex;gap:8px;margin-top:14px;">
+      <button class="tb-btn" id="expConfirmBtn" style="flex:1;justify-content:center;background:var(--accent);color:#fff;border-color:var(--accent);"><i class="mi sm">download</i> تصدير</button>
+      <button class="tb-btn" id="expCancelBtn">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<!-- HTML EDITOR MODAL -->
+
+<div id="html-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:900;align-items:center;justify-content:center;">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;width:700px;max-width:96vw;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 30px 80px rgba(0,0,0,.8);">
+    <div style="display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--border);">
+      <span style="font-size:13px;font-weight:700;color:var(--accent);">&lt;/&gt;</span>
+      <span style="font-size:12px;font-weight:700;">محرر HTML المخصص</span>
+      <div style="margin-left:auto;display:flex;gap:6px;">
+        <button id="htmlSnippetBtn" class="tb-btn"><i class="mi sm">auto_awesome</i> قوالب</button>
+        <button id="htmlPreviewBtn" class="tb-btn"><i class="mi sm">preview</i> معاينة</button>
+      </div>
+    </div>
+    <div id="html-snippets" style="display:none;padding:10px 14px;border-bottom:1px solid var(--border);background:var(--surface2);flex-wrap:wrap;gap:6px;">
+      <span style="font-size:10px;color:var(--text2);display:block;margin-bottom:6px;">انقر على القالب لإدراجه:</span>
+      <div style="display:flex;flex-wrap:wrap;gap:5px;" id="snippets-list"></div>
+    </div>
+    <div style="display:flex;flex:1;min-height:0;overflow:hidden;">
+      <div style="flex:1;display:flex;flex-direction:column;min-width:0;" id="html-code-side">
+        <div style="padding:6px 14px;font-size:10px;color:var(--text2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px;">
+          <span>HTML</span>
+          <span id="htmlCharCount" style="margin-left:auto;font-family:'IBM Plex Mono',monospace;">0 حرف</span>
+        </div>
+        <textarea id="htmlCode" spellcheck="false" style="flex:1;background:#070709;color:#e2e8f0;padding:14px;font-size:12px;font-family:'IBM Plex Mono',monospace;border:none;outline:none;resize:none;line-height:1.7;tab-size:2;"></textarea>
+      </div>
+      <div id="html-preview-side" style="display:none;flex:1;border-right:1px solid var(--border);flex-direction:column;min-width:0;">
+        <div style="padding:6px 14px;font-size:10px;color:var(--text2);border-bottom:1px solid var(--border);">معاينة مباشرة</div>
+        <iframe id="htmlPreviewFrame" style="flex:1;border:none;background:#fff;width:100%;height:100%;" sandbox="allow-scripts allow-same-origin"></iframe>
+      </div>
+    </div>
+    <div style="border-top:1px solid var(--border);padding:8px 14px;background:var(--surface2);display:flex;align-items:center;gap:8px;">
+      <span style="font-size:10px;color:var(--text2);flex-shrink:0;">CSS مخصص:</span>
+      <input type="text" id="htmlCss" placeholder="مثال: color:red; font-size:20px;" style="flex:1;background:var(--surface3);border:1px solid var(--border);color:var(--text);padding:4px 8px;border-radius:5px;font-size:11px;font-family:'IBM Plex Mono',monospace;outline:none;">
+    </div>
+    <div style="display:flex;gap:8px;padding:12px 16px;border-top:1px solid var(--border);">
+      <button id="htmlApplyBtn" class="tb-btn" style="flex:1;justify-content:center;background:var(--accent);color:#fff;border-color:var(--accent);"><i class="mi sm">check</i> تطبيق</button>
+      <button id="htmlCancelBtn" class="tb-btn"><i class="mi sm">close</i> إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<!-- COPY TO PAGE MODAL -->
+<div id="copy-page-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:950;align-items:center;justify-content:center;">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;width:320px;padding:20px;box-shadow:0 20px 60px rgba(0,0,0,.8);">
+    <div style="font-size:13px;font-weight:700;margin-bottom:14px;">نسخ العنصر إلى صفحة:</div>
+    <div id="copy-page-list" style="display:flex;flex-direction:column;gap:6px;max-height:200px;overflow-y:auto;margin-bottom:14px;"></div>
+    <button id="copy-page-cancel" class="tb-btn" style="width:100%;justify-content:center;">إلغاء</button>
+  </div>
+</div>
+
+<!-- PREVIEW -->
+<div id="prev">
+  <div id="prev-inner">
+    <button id="prev-close">✕</button>
+    <div id="prev-pages-nav" style="display:none;">
+      <div id="prev-page-arrows">
+        <button id="prev-prev-page">‹</button>
+      </div>
+      <div id="prev-page-btns" style="display:flex;gap:4px;flex-wrap:wrap;justify-content:center;"></div>
+      <div id="prev-page-arrows2">
+        <button id="prev-next-page">›</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+/* ════════════════════════════
+   PAGES STATE
+════════════════════════════ */
+// Each page: { id, name, els, cvBg }
+var pages = [{id:'p1', name:'الصفحة 1', els:[], cvBg:'#ffffff'}];
+var currentPageIdx = 0;
+var idC = 1;
+var selIds = new Set();
+var zoom = 1, snapOn = true, gridOn = false, darkCv = false;
+var hist = [], histIdx = -1;
+var GRID = 10, CW = 880, CH = 580;
+
+// Getters for current page
+function curPage(){ return pages[currentPageIdx]; }
+function get_els(){ return curPage().els; }
+function set_els(v){ curPage().els = v; }
+
+/* ════════════════════════════
+   HISTORY
+════════════════════════════ */
+function saveH(){
+  hist = hist.slice(0, histIdx+1);
+  hist.push(JSON.stringify({pages:pages, curIdx:currentPageIdx}));
+  if(hist.length > 80) hist.shift(); else histIdx++;
+  scheduleHashSave();
+}
+function undo(){
+  if(histIdx <= 0) return;
+  histIdx--;
+  var s = JSON.parse(hist[histIdx]);
+  pages = s.pages; currentPageIdx = s.curIdx;
+  selIds = new Set();
+  renderAll(); renderPagesBar(); toast('↩ تراجع');
+}
+function redo(){
+  if(histIdx >= hist.length-1) return;
+  histIdx++;
+  var s = JSON.parse(hist[histIdx]);
+  pages = s.pages; currentPageIdx = s.curIdx;
+  selIds = new Set();
+  renderAll(); renderPagesBar(); toast('↪ إعادة');
+}
+
+/* ════════════════════════════
+   FACTORY
+════════════════════════════ */
+function rndHsl(){ return 'hsl('+Math.floor(Math.random()*360)+',55%,55%)'; }
+function makeEl(type){
+  return {
+    id:'e'+(idC++), type:type,
+    text:type==='text'?'نص هنا':type==='image'?'':type==='line'?'':'عنصر',
+    x:50+Math.floor(Math.random()*200), y:50+Math.floor(Math.random()*150),
+    w:type==='text'?140:type==='line'?160:150,
+    h:type==='text'?44:type==='line'?4:54,
+    rot:0, bg:type==='text'?'#111':type==='line'?'#555':rndHsl(),
+    color:'#fff', fs:15, rad:type==='circle'?999:type==='text'?0:8,
+    op:1, shadow:'', border:'',
+    imgSrc:'https://picsum.photos/seed/'+(idC)+'/280/160',
+    visible:true, group:null, anim:{type:'',dur:1,delay:0,iter:'1'}
+  };
+}
+
+/* ════════════════════════════
+   PAGES MANAGEMENT
+════════════════════════════ */
+function addPage(name){
+  var pg = {
+    id: 'p'+(Date.now()),
+    name: name || ('الصفحة '+(pages.length+1)),
+    els: [],
+    cvBg: '#ffffff'
+  };
+  pages.push(pg);
+  switchPage(pages.length - 1);
+  saveH();
+  renderPagesBar();
+  toast('📄 صفحة جديدة: '+pg.name);
+}
+
+function deletePage(idx){
+  if(pages.length <= 1){ toast('⚠ لا يمكن حذف الصفحة الوحيدة'); return; }
+  if(!confirm('حذف "'+pages[idx].name+'"؟')) return;
+  pages.splice(idx, 1);
+  if(currentPageIdx >= pages.length) currentPageIdx = pages.length - 1;
+  selIds = new Set();
+  saveH(); renderAll(); renderPagesBar();
+  toast('🗑 حُذفت الصفحة');
+}
+
+function switchPage(idx){
+  if(idx < 0 || idx >= pages.length) return;
+  selIds = new Set();
+  currentPageIdx = idx;
+  // Apply this page's background
+  applyCanvasBg(curPage().cvBg);
+  renderAll(); renderPagesBar();
+}
+
+function duplicatePage(idx){
+  var src = pages[idx];
+  var copy = JSON.parse(JSON.stringify(src));
+  copy.id = 'p'+(Date.now());
+  copy.name = src.name + ' (نسخة)';
+  pages.splice(idx+1, 0, copy);
+  switchPage(idx+1);
+  saveH(); renderPagesBar();
+  toast('⧉ نسخة من الصفحة');
+}
+
+function renamePage(idx, newName){
+  if(!newName || !newName.trim()) return;
+  pages[idx].name = newName.trim();
+  saveH(); renderPagesBar();
+}
+
+function movePageLeft(idx){
+  if(idx <= 0) return;
+  var tmp = pages[idx]; pages[idx] = pages[idx-1]; pages[idx-1] = tmp;
+  if(currentPageIdx === idx) currentPageIdx = idx-1;
+  else if(currentPageIdx === idx-1) currentPageIdx = idx;
+  saveH(); renderPagesBar();
+}
+
+function movePageRight(idx){
+  if(idx >= pages.length-1) return;
+  var tmp = pages[idx]; pages[idx] = pages[idx+1]; pages[idx+1] = tmp;
+  if(currentPageIdx === idx) currentPageIdx = idx+1;
+  else if(currentPageIdx === idx+1) currentPageIdx = idx;
+  saveH(); renderPagesBar();
+}
+
+/* ════════════════════════════
+   PAGES BAR RENDER
+════════════════════════════ */
+function renderPagesBar(){
+  var wrap = document.getElementById('pages-tabs-wrap');
+  wrap.innerHTML = '';
+  pages.forEach(function(pg, idx){
+    var tab = document.createElement('div');
+    tab.className = 'page-tab' + (idx === currentPageIdx ? ' active' : '');
+    tab.draggable = true;
+    tab.dataset.idx = idx;
+
+    // Page number badge
+    var num = document.createElement('span');
+    num.className = 'page-num';
+    num.textContent = idx+1;
+
+    // Page name (dblclick to rename)
+    var nameSpan = document.createElement('span');
+    nameSpan.textContent = pg.name;
+    nameSpan.style.cssText = 'max-width:90px;overflow:hidden;text-overflow:ellipsis;';
+
+    // Close button
+    var closeBtn = document.createElement('button');
+    closeBtn.className = 'page-close';
+    closeBtn.title = 'حذف الصفحة';
+    closeBtn.innerHTML = '✕';
+    closeBtn.addEventListener('click', function(ev){
+      ev.stopPropagation();
+      deletePage(idx);
+    });
+
+    tab.appendChild(num);
+    tab.appendChild(nameSpan);
+    if(pages.length > 1) tab.appendChild(closeBtn);
+
+    // Click to switch
+    tab.addEventListener('click', function(){ switchPage(idx); });
+
+    // Double-click to rename
+    nameSpan.addEventListener('dblclick', function(ev){
+      ev.stopPropagation();
+      var input = document.createElement('input');
+      input.className = 'page-rename';
+      input.value = pg.name;
+      nameSpan.style.display = 'none';
+      tab.insertBefore(input, closeBtn);
+      input.focus(); input.select();
+      function done(){
+        renamePage(idx, input.value);
+        input.remove();
+        nameSpan.style.display = '';
+      }
+      input.addEventListener('blur', done);
+      input.addEventListener('keydown', function(e){
+        if(e.key==='Enter') done();
+        if(e.key==='Escape'){ input.remove(); nameSpan.style.display=''; }
+        e.stopPropagation();
+      });
+    });
+
+    // Right-click context for page
+    tab.addEventListener('contextmenu', function(ev){
+      ev.preventDefault(); ev.stopPropagation();
+      showPageCtx(ev.clientX, ev.clientY, idx);
+    });
+
+    // Drag to reorder
+    tab.addEventListener('dragstart', function(ev){
+      ev.dataTransfer.setData('pageIdx', idx);
+    });
+    tab.addEventListener('dragover', function(ev){
+      ev.preventDefault();
+      tab.classList.add('drag-over');
+    });
+    tab.addEventListener('dragleave', function(){
+      tab.classList.remove('drag-over');
+    });
+    tab.addEventListener('drop', function(ev){
+      ev.preventDefault();
+      tab.classList.remove('drag-over');
+      var fromIdx = parseInt(ev.dataTransfer.getData('pageIdx'));
+      if(fromIdx === idx) return;
+      var pg = pages.splice(fromIdx, 1)[0];
+      pages.splice(idx, 0, pg);
+      // Adjust currentPageIdx
+      if(currentPageIdx === fromIdx) currentPageIdx = idx;
+      else if(fromIdx < currentPageIdx && idx >= currentPageIdx) currentPageIdx--;
+      else if(fromIdx > currentPageIdx && idx <= currentPageIdx) currentPageIdx++;
+      saveH(); renderPagesBar(); renderAll();
+    });
+
+    wrap.appendChild(tab);
+  });
+
+  document.getElementById('pages-label').textContent =
+    'ص '+(currentPageIdx+1)+' / '+pages.length;
+  document.getElementById('cvInfoPages').textContent = pages.length;
+}
+
+/* PAGE CONTEXT MENU */
+var pageCtxIdx = -1;
+var pageCtxMenu = null;
+
+function showPageCtx(x, y, idx){
+  pageCtxIdx = idx;
+  if(pageCtxMenu) pageCtxMenu.remove();
+  pageCtxMenu = document.createElement('div');
+  pageCtxMenu.style.cssText = 'position:fixed;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:4px;z-index:2000;min-width:160px;box-shadow:0 10px 30px rgba(0,0,0,.6);font-family:Tajawal,sans-serif;';
+  pageCtxMenu.style.left = x+'px'; pageCtxMenu.style.top = y+'px';
+
+  function item(icon, label, fn, red){
+    var d = document.createElement('div');
+    d.style.cssText = 'padding:6px 10px;cursor:pointer;border-radius:5px;font-size:11px;display:flex;align-items:center;gap:7px;color:'+(red?'var(--danger)':'var(--text3)')+';';
+    d.innerHTML = '<i class="mi sm">'+icon+'</i> '+label;
+    d.addEventListener('mouseover', function(){ d.style.background='var(--surface2)'; d.style.color=red?'var(--danger)':'var(--text)'; });
+    d.addEventListener('mouseout', function(){ d.style.background=''; d.style.color=red?'var(--danger)':'var(--text3)'; });
+    d.addEventListener('click', function(){ pageCtxMenu.remove(); pageCtxMenu=null; fn(); });
+    return d;
+  }
+  function sep(){ var s=document.createElement('div'); s.style.cssText='height:1px;background:var(--border);margin:3px 0;'; return s; }
+
+  pageCtxMenu.appendChild(item('edit', 'إعادة التسمية', function(){
+    var name = prompt('اسم الصفحة:', pages[idx].name);
+    if(name) renamePage(idx, name);
+  }));
+  pageCtxMenu.appendChild(item('content_copy', 'نسخ الصفحة', function(){ duplicatePage(idx); }));
+  pageCtxMenu.appendChild(item('arrow_back', 'تحريك يمين', function(){ movePageLeft(idx); }));
+  pageCtxMenu.appendChild(item('arrow_forward', 'تحريك يسار', function(){ movePageRight(idx); }));
+  pageCtxMenu.appendChild(sep());
+  pageCtxMenu.appendChild(item('delete', 'حذف الصفحة', function(){ deletePage(idx); }, true));
+
+  document.body.appendChild(pageCtxMenu);
+}
+
+document.addEventListener('click', function(ev){
+  if(pageCtxMenu && !pageCtxMenu.contains(ev.target)){
+    pageCtxMenu.remove(); pageCtxMenu = null;
+  }
+});
+
+/* ════════════════════════════
+   RENDER
+════════════════════════════ */
+function renderAll(){
+  renderCanvas();
+  renderLayers();
+  updateProps();
+  updateAnimPanel();
+  updateEventsPanel();
+  updateCanvasInfo();
+  if(document.getElementById('pane-dev').style.display==='flex') renderCode();
+  if(typeof renderComments==='function' && document.getElementById('cmt-list')) renderComments();
+}
+
+function renderCanvas(){
+  var cv = document.getElementById('canvas');
+  Array.from(cv.children).forEach(function(c){
+    if(c.id !== 'grid-cv' && c.id !== 'sel-box') c.remove();
+  });
+  drawGrid();
+  get_els().forEach(function(e){
+    if(e.visible === false) return;
+    cv.appendChild(buildDOM(e));
+  });
+}
+
+function applyElStyle(div, e){
+  div.style.cssText = '';
+  div.style.position = 'absolute';
+  div.style.left = e.x+'px'; div.style.top = e.y+'px';
+  div.style.width = e.w+'px'; div.style.height = (e.type==='line'?4:e.h)+'px';
+  div.style.transform = 'rotate('+(e.rot||0)+'deg)';
+  div.style.opacity = e.op!=null?e.op:1;
+  div.style.color = e.color||'#fff';
+  div.style.fontSize = (e.fs||15)+'px';
+  div.style.fontFamily = "'Tajawal',sans-serif";
+  div.style.fontWeight = '600';
+  div.style.display = 'flex'; div.style.alignItems = 'center'; div.style.justifyContent = 'center';
+  div.style.cursor = 'move'; div.style.userSelect = 'none';
+  div.style.zIndex = e.zidx||0;
+  if(e.shadow) div.style.boxShadow = e.shadow;
+  if(e.border) div.style.border = e.border;
+  if(e.type==='circle'){ div.style.background=e.bg||'#888'; div.style.borderRadius='50%'; }
+  else if(e.type==='text'){ div.style.background='transparent'; div.style.color=e.bg||'#111'; div.style.fontSize=(e.fs||15)+'px'; }
+  else if(e.type==='line'){ div.style.background='transparent'; div.style.borderBottom='3px solid '+(e.bg||'#555'); div.style.height='4px'; }
+  else if(e.type==='image'){ div.style.background='#222'; div.style.borderRadius=(e.rad||0)+'px'; div.style.overflow='hidden'; }
+  else if(e.type==='html'){ div.style.background=e.bg||'transparent'; div.style.borderRadius=(e.rad||0)+'px'; div.style.overflow='hidden'; div.style.display='block'; div.style.alignItems=''; div.style.justifyContent=''; }
+  else{ div.style.background=e.bg||'#888'; div.style.borderRadius=(e.rad||0)+'px'; }
+  if(e.anim&&e.anim.type) div.style.animation = e.anim.type+' '+e.anim.dur+'s '+e.anim.delay+'s '+e.anim.iter+' ease-in-out both';
+  if(e.customCss){ try{ div.style.cssText += ';'+e.customCss; }catch(_){} }
+}
+
+function buildDOM(e){
+  var div = document.createElement('div');
+  div.className = 'el'; div.dataset.id = e.id;
+  applyElStyle(div, e);
+  if(selIds.size===1&&selIds.has(e.id)) div.classList.add('sel');
+  else if(selIds.size>1&&selIds.has(e.id)) div.classList.add('msel');
+
+  if(e.type==='image'){
+    var img = document.createElement('img');
+    img.src = e.imgSrc||'';
+    img.style.cssText = 'width:100%;height:100%;object-fit:cover;pointer-events:none;border-radius:inherit;';
+    div.appendChild(img);
+  } else if(e.type==='html'){
+    var htmlWrap = document.createElement('div');
+    htmlWrap.style.cssText = 'width:100%;height:100%;overflow:auto;pointer-events:none;';
+    htmlWrap.innerHTML = e.htmlContent||'<p style="color:#888;font-size:11px;padding:8px;">HTML فارغ — انقر مرتين للتعديل</p>';
+    div.appendChild(htmlWrap);
+  } else {
+    div.innerText = e.text||'';
+  }
+
+  var ev = e.events||{};
+  if(ev.clickType||ev.hoverType){
+    var badge = document.createElement('span');
+    badge.style.cssText = 'position:absolute;top:2px;right:2px;font-size:9px;background:rgba(124,58,237,.8);color:#fff;border-radius:3px;padding:1px 3px;line-height:1.4;pointer-events:none;z-index:25;';
+    badge.textContent = ev.clickType==='gotoPage'?'🔗':'⚡';
+    div.appendChild(badge);
+  }
+
+  if(selIds.size===1&&selIds.has(e.id)){
+    ['nw','ne','sw','se','n','s','e','w'].forEach(function(d){
+      var h = document.createElement('div');
+      h.className = 'h h-'+d;
+      h.addEventListener('mousedown', makeResizeHandler(e,d));
+      div.appendChild(h);
+    });
+    var rh = document.createElement('div');
+    rh.className = 'h-rot';
+    rh.addEventListener('mousedown', makeRotateHandler(e));
+    div.appendChild(rh);
+  }
+
+  div.addEventListener('mousedown', function(ev2){
+    if(ev2.target.classList.contains('h')||ev2.target.classList.contains('h-rot')) return;
+    ev2.stopPropagation();
+    if(ev2.shiftKey){
+      if(selIds.has(e.id)) selIds.delete(e.id); else selIds.add(e.id);
+      renderAll(); return;
+    } else {
+      if(!selIds.has(e.id)){ selIds = new Set([e.id]); renderAll(); }
+    }
+    startDrag(ev2);
+  });
+
+  div.addEventListener('contextmenu', function(ev2){
+    ev2.preventDefault();
+    if(!selIds.has(e.id)){ selIds = new Set([e.id]); renderAll(); }
+    showCtx(ev2.clientX, ev2.clientY);
+  });
+
+  div.addEventListener('dblclick', function(){
+    if(e.type==='text'||e.type==='rect'){
+      var t = prompt('النص:', e.text);
+      if(t!=null){ e.text=t; saveH(); renderAll(); }
+    } else if(e.type==='html'){
+      openHtmlEditor(e);
+    }
+  });
+
+  return div;
+}
+
+/* ════════════════════════════
+   DRAG
+════════════════════════════ */
+function startDrag(ev){
+  var sx = ev.clientX, sy = ev.clientY, moved = false;
+  var origins = {};
+  var ids = new Set(selIds);
+  ids.forEach(function(id){
+    var e = getEl(id); if(e) origins[id] = {x:e.x, y:e.y};
+  });
+  function onMove(e){
+    moved = true;
+    var dx = (e.clientX-sx)/zoom, dy = (e.clientY-sy)/zoom;
+    // Smart snap: compute snap delta from primary element
+    var primary = getEl([...ids][0]);
+    var snapDelta = {x:0,y:0};
+    if(snapOn && primary){
+      var px = origins[primary.id].x+dx, py = origins[primary.id].y+dy;
+      snapDelta = computeSmartSnap(primary, px, py);
+    }
+    ids.forEach(function(id){
+      var el = getEl(id); if(!el) return;
+      var nx = origins[id].x+dx, ny = origins[id].y+dy;
+      nx += snapDelta.x; ny += snapDelta.y;
+      el.x = Math.max(0, Math.min(CW-el.w, nx));
+      el.y = Math.max(0, Math.min(CH-el.h, ny));
+    });
+    renderCanvas(); updateProps(); showSnapLines(ids);
+  }
+  function onUp(){
+    if(moved){ saveH(); clearSnap(); }
+    document.removeEventListener('mousemove', onMove);
+    document.removeEventListener('mouseup', onUp);
+  }
+  document.addEventListener('mousemove', onMove);
+  document.addEventListener('mouseup', onUp);
+}
+
+/* ════════════════════════════
+   RESIZE
+════════════════════════════ */
+function makeResizeHandler(e, dir){
+  return function(ev){
+    ev.stopPropagation(); ev.preventDefault();
+    var sx=ev.clientX, sy=ev.clientY;
+    var ox=e.x, oy=e.y, ow=e.w, oh=e.h;
+    function onMove(mv){
+      var dx=(mv.clientX-sx)/zoom, dy=(mv.clientY-sy)/zoom;
+      var nx=ox, ny=oy, nw=ow, nh=oh;
+      if(dir.indexOf('e')!==-1) nw=Math.max(10,ow+dx);
+      if(dir.indexOf('s')!==-1) nh=Math.max(10,oh+dy);
+      if(dir.indexOf('w')!==-1){ nw=Math.max(10,ow-dx); nx=ox+ow-nw; }
+      if(dir.indexOf('n')!==-1){ nh=Math.max(10,oh-dy); ny=oy+oh-nh; }
+      if(snapOn){ nw=Math.round(nw/GRID)*GRID; nh=Math.round(nh/GRID)*GRID; }
+      e.x=nx; e.y=ny; e.w=nw; e.h=nh;
+      renderCanvas(); updateProps();
+    }
+    function onUp(){ saveH(); document.removeEventListener('mousemove',onMove); document.removeEventListener('mouseup',onUp); }
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+  };
+}
+
+/* ════════════════════════════
+   ROTATE
+════════════════════════════ */
+function makeRotateHandler(e){
+  return function(ev){
+    ev.stopPropagation(); ev.preventDefault();
+    var rect = document.getElementById('canvas').getBoundingClientRect();
+    var cx = rect.left+e.x+e.w/2, cy = rect.top+e.y+e.h/2;
+    function onMove(mv){
+      var angle = Math.atan2(mv.clientY-cy, mv.clientX-cx)*180/Math.PI+90;
+      if(snapOn) angle = Math.round(angle/15)*15;
+      e.rot = Math.round(angle);
+      renderCanvas(); updateProps();
+    }
+    function onUp(){ saveH(); document.removeEventListener('mousemove',onMove); document.removeEventListener('mouseup',onUp); }
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+  };
+}
+
+/* ════════════════════════════
+   MULTI-SELECT BOX
+════════════════════════════ */
+var sbStart = null;
+document.getElementById('canvas-area').addEventListener('mousedown', function(ev){
+  var cv = document.getElementById('canvas');
+  if(ev.target !== cv && ev.target !== document.getElementById('canvas-area')) return;
+  var rect = cv.getBoundingClientRect();
+  sbStart = {x:(ev.clientX-rect.left)/zoom, y:(ev.clientY-rect.top)/zoom};
+  selIds = new Set();
+  var box = document.getElementById('sel-box');
+  box.style.display = 'block';
+  box.style.left = sbStart.x+'px'; box.style.top = sbStart.y+'px';
+  box.style.width = '0'; box.style.height = '0';
+  renderCanvas();
+});
+
+document.addEventListener('mousemove', function(ev){
+  if(!sbStart) return;
+  var rect = document.getElementById('canvas').getBoundingClientRect();
+  var cx = (ev.clientX-rect.left)/zoom, cy = (ev.clientY-rect.top)/zoom;
+  var bx=Math.min(cx,sbStart.x), by=Math.min(cy,sbStart.y);
+  var bw=Math.abs(cx-sbStart.x), bh=Math.abs(cy-sbStart.y);
+  var box = document.getElementById('sel-box');
+  box.style.left=bx+'px'; box.style.top=by+'px';
+  box.style.width=bw+'px'; box.style.height=bh+'px';
+  selIds = new Set();
+  get_els().forEach(function(e){
+    if(e.x+e.w>bx&&e.x<bx+bw&&e.y+e.h>by&&e.y<by+bh) selIds.add(e.id);
+  });
+  renderCanvas();
+});
+
+document.addEventListener('mouseup', function(ev){
+  if(!sbStart) return;
+  sbStart = null;
+  document.getElementById('sel-box').style.display = 'none';
+  renderAll();
+});
+
+/* ════════════════════════════
+   SNAP LINES
+════════════════════════════ */
+function showSnapLines(ids){
+  clearSnap();
+  if(!snapOn) return;
+  var cv = document.getElementById('canvas');
+  var THRESH = 4;
+  function addV(x, smart, center){ var v=document.createElement('div'); v.className='snapV'+(smart?' smart':'')+(center?' smart-c':''); v.style.left=x+'px'; cv.appendChild(v); }
+  function addH(y, smart, center){ var h=document.createElement('div'); h.className='snapH'+(smart?' smart':'')+(center?' smart-c':''); h.style.top=y+'px'; cv.appendChild(h); }
+  ids.forEach(function(id){
+    var e = getEl(id); if(!e) return;
+    var eL=e.x, eR=e.x+e.w, eCx=e.x+e.w/2;
+    var eT=e.y, eB=e.y+e.h, eCy=e.y+e.h/2;
+    // Canvas guides
+    if(Math.abs(eCx-CW/2)<THRESH) addV(CW/2,true,true);
+    if(Math.abs(eCy-CH/2)<THRESH) addH(CH/2,true,true);
+    if(Math.abs(eL)<THRESH) addV(0,true);
+    if(Math.abs(eR-CW)<THRESH) addV(CW,true);
+    if(Math.abs(eT)<THRESH) addH(0,true);
+    if(Math.abs(eB-CH)<THRESH) addH(CH,true);
+    get_els().forEach(function(o){
+      if(o.id===id||selIds.has(o.id)||o.visible===false) return;
+      var oL=o.x, oR=o.x+o.w, oCx=o.x+o.w/2;
+      var oT=o.y, oB=o.y+o.h, oCy=o.y+o.h/2;
+      [[eL,oL],[eL,oR],[eR,oL],[eR,oR]].forEach(function(p){ if(Math.abs(p[0]-p[1])<THRESH) addV(p[1]); });
+      if(Math.abs(eCx-oCx)<THRESH) addV(oCx,false,true);
+      [[eT,oT],[eT,oB],[eB,oT],[eB,oB]].forEach(function(p){ if(Math.abs(p[0]-p[1])<THRESH) addH(p[1]); });
+      if(Math.abs(eCy-oCy)<THRESH) addH(oCy,false,true);
+    });
+  });
+}
+
+/* Compute snap delta to apply when dragging */
+function computeSmartSnap(el, nx, ny){
+  var THRESH = 6;
+  var dx=0, dy=0, bestX=THRESH, bestY=THRESH;
+  var L=nx, R=nx+el.w, Cx=nx+el.w/2;
+  var T=ny, B=ny+el.h, Cy=ny+el.h/2;
+  function tryX(my, other){ var d=other-my; if(Math.abs(d)<bestX){ bestX=Math.abs(d); dx=d; } }
+  function tryY(my, other){ var d=other-my; if(Math.abs(d)<bestY){ bestY=Math.abs(d); dy=d; } }
+  // Canvas
+  tryX(L,0); tryX(R,CW); tryX(Cx,CW/2);
+  tryY(T,0); tryY(B,CH); tryY(Cy,CH/2);
+  get_els().forEach(function(o){
+    if(o.id===el.id||selIds.has(o.id)||o.visible===false) return;
+    tryX(L,o.x); tryX(L,o.x+o.w); tryX(R,o.x); tryX(R,o.x+o.w); tryX(Cx,o.x+o.w/2);
+    tryY(T,o.y); tryY(T,o.y+o.h); tryY(B,o.y); tryY(B,o.y+o.h); tryY(Cy,o.y+o.h/2);
+  });
+  return {x:dx, y:dy};
+}
+function clearSnap(){
+  document.querySelectorAll('.snapH,.snapV').forEach(function(e){ e.remove(); });
+}
+
+/* ════════════════════════════
+   GRID
+════════════════════════════ */
+function drawGrid(){
+  var cv = document.getElementById('grid-cv');
+  cv.width=CW; cv.height=CH;
+  var ctx = cv.getContext('2d');
+  ctx.clearRect(0,0,CW,CH);
+  if(!gridOn) return;
+  ctx.strokeStyle='rgba(124,58,237,0.1)'; ctx.lineWidth=1;
+  for(var x=0;x<CW;x+=GRID){ ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,CH);ctx.stroke(); }
+  for(var y=0;y<CH;y+=GRID){ ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(CW,y);ctx.stroke(); }
+  ctx.strokeStyle='rgba(124,58,237,0.22)';
+  for(var x2=0;x2<CW;x2+=100){ ctx.beginPath();ctx.moveTo(x2,0);ctx.lineTo(x2,CH);ctx.stroke(); }
+  for(var y2=0;y2<CH;y2+=100){ ctx.beginPath();ctx.moveTo(0,y2);ctx.lineTo(CW,y2);ctx.stroke(); }
+}
+
+/* ════════════════════════════
+   ZOOM
+════════════════════════════ */
+function setZoom(z){
+  zoom = Math.max(0.15, Math.min(4, z));
+  document.getElementById('canvas-wrap').style.transform = 'scale('+zoom+')';
+  document.getElementById('zoomLabel').textContent = Math.round(zoom*100)+'%';
+}
+document.getElementById('canvas-area').addEventListener('wheel', function(ev){
+  if(!ev.ctrlKey&&!ev.metaKey) return;
+  ev.preventDefault();
+  setZoom(zoom+(ev.deltaY>0?-0.08:0.08));
+},{passive:false});
+
+/* ════════════════════════════
+   LAYERS
+════════════════════════════ */
+function renderLayers(){
+  var list = document.getElementById('layers-list');
+  list.innerHTML = '';
+  var rev = [].concat(get_els()).reverse();
+  rev.forEach(function(e, displayIdx){
+    var item = document.createElement('div');
+    var isSel = selIds.has(e.id);
+    item.className = 'layer-item'+(isSel?(selIds.size>1?' on2':' on'):'');
+    item.draggable = true;
+    item.dataset.eid = e.id;
+    var grip = document.createElement('span'); grip.className='layer-grip'; grip.innerHTML='⋮⋮';
+    var dot = document.createElement('span'); dot.className='layer-dot'; dot.style.background=e.bg&&e.bg!=='transparent'?e.bg:'#888';
+    var name = document.createElement('span'); name.className='layer-name'+(isSel?' on':''); name.textContent=(e.text||e.type||e.id).substring(0,18);
+    var eye = document.createElement('span'); eye.className='lbtn'; eye.innerHTML=e.visible===false?'<i class="mi sm">visibility_off</i>':'<i class="mi sm">visibility</i>';
+    eye.addEventListener('click',function(ev2){ ev2.stopPropagation(); e.visible=e.visible===false; renderAll(); });
+    var up = document.createElement('button'); up.className='lbtn'; up.innerHTML='<i class="mi sm">arrow_upward</i>';
+    up.addEventListener('click',function(ev2){ ev2.stopPropagation(); layerMove(e.id,-1); });
+    var dn = document.createElement('button'); dn.className='lbtn'; dn.innerHTML='<i class="mi sm">arrow_downward</i>';
+    dn.addEventListener('click',function(ev2){ ev2.stopPropagation(); layerMove(e.id,1); });
+    item.appendChild(grip); item.appendChild(dot); item.appendChild(name); item.appendChild(eye); item.appendChild(up); item.appendChild(dn);
+    item.addEventListener('click',function(){ selIds=new Set([e.id]); renderAll(); });
+    // Drag-to-reorder
+    item.addEventListener('dragstart',function(ev2){ ev2.dataTransfer.effectAllowed='move'; ev2.dataTransfer.setData('text/plain',e.id); item.classList.add('dragging'); });
+    item.addEventListener('dragend',function(){ item.classList.remove('dragging'); document.querySelectorAll('.layer-item').forEach(function(x){x.classList.remove('drop-above','drop-below');}); });
+    item.addEventListener('dragover',function(ev2){ ev2.preventDefault(); ev2.dataTransfer.dropEffect='move'; var r=item.getBoundingClientRect(); var above=(ev2.clientY-r.top)<r.height/2; item.classList.toggle('drop-above',above); item.classList.toggle('drop-below',!above); });
+    item.addEventListener('dragleave',function(){ item.classList.remove('drop-above','drop-below'); });
+    item.addEventListener('drop',function(ev2){ ev2.preventDefault(); var srcId=ev2.dataTransfer.getData('text/plain'); var r=item.getBoundingClientRect(); var above=(ev2.clientY-r.top)<r.height/2; layerReorder(srcId, e.id, above); });
+    list.appendChild(item);
+  });
+}
+
+function layerMove(id, dir){
+  var arr = get_els();
+  var idx = arr.findIndex(function(e){ return e.id===id; });
+  var ni = idx+dir;
+  if(ni<0||ni>=arr.length) return;
+  var tmp=arr[idx]; arr[idx]=arr[ni]; arr[ni]=tmp;
+  saveH(); renderAll();
+}
+
+/* Drag reorder: display order is reversed (top of list = top z-index = end of els array).
+   `above` in display means "higher in stack" → later in els array. */
+function layerReorder(srcId, tgtId, above){
+  if(srcId===tgtId) return;
+  var arr = get_els();
+  var si = arr.findIndex(function(e){return e.id===srcId;});
+  var ti = arr.findIndex(function(e){return e.id===tgtId;});
+  if(si<0||ti<0) return;
+  var item = arr.splice(si,1)[0];
+  ti = arr.findIndex(function(e){return e.id===tgtId;});
+  // "above" in displayed list (reversed) => insert AFTER target in array
+  var insertAt = above ? ti+1 : ti;
+  arr.splice(insertAt, 0, item);
+  saveH(); renderAll(); toast('↕ تم إعادة الترتيب');
+}
+
+/* ════════════════════════════
+   PROPS
+════════════════════════════ */
+function getEl(id){ return get_els().find(function(e){ return e.id===id; }); }
+function getSel(){ return selIds.size===1?getEl([...selIds][0]):null; }
+
+function colorHex(c){
+  if(!c||c==='transparent') return '#888888';
+  if(c.startsWith&&c.startsWith('#')&&c.length===7) return c;
+  var tmp=document.createElement('canvas'); tmp.width=tmp.height=1;
+  var ctx=tmp.getContext('2d'); ctx.fillStyle=c; ctx.fillRect(0,0,1,1);
+  var d=ctx.getImageData(0,0,1,1).data;
+  return '#'+[d[0],d[1],d[2]].map(function(v){ return v.toString(16).padStart(2,'0'); }).join('');
+}
+
+function updateProps(){
+  var e = getSel();
+  document.getElementById('no-sel').style.display = e?'none':'block';
+  document.getElementById('props-form').style.display = e?'block':'none';
+  if(!e) return;
+  document.getElementById('fText').value = e.text||'';
+  document.getElementById('fX').value = Math.round(e.x);
+  document.getElementById('fY').value = Math.round(e.y);
+  document.getElementById('fW').value = Math.round(e.w);
+  document.getElementById('fH').value = Math.round(e.h);
+  document.getElementById('fRot').value = e.rot||0;
+  document.getElementById('fBg').value = colorHex(e.bg);
+  document.getElementById('fColor').value = colorHex(e.color);
+  document.getElementById('fFS').value = e.fs||15;
+  document.getElementById('fRad').value = e.rad||0;
+  document.getElementById('fOp').value = e.op!=null?e.op:1;
+  document.getElementById('fShad').value = e.shadow||'';
+  document.getElementById('fBorder').value = e.border||'';
+  document.getElementById('fType').value = e.type||'rect';
+  document.getElementById('imgField').style.display = e.type==='image'?'block':'none';
+  document.getElementById('fImg').value = e.imgSrc||'';
+  document.getElementById('editHtmlField').style.display = e.type==='html'?'block':'none';
+  var cc = document.getElementById('fCustomCss'); if(cc) cc.value = e.customCss||'';
+}
+
+function bindProps(){
+  function setProp(key,val){
+    selIds.forEach(function(id){ var e=getEl(id); if(e) e[key]=val; });
+    renderCanvas(); renderLayers();
+  }
+  function g(id){ return document.getElementById(id); }
+  g('fText').addEventListener('input',function(){ setProp('text',this.value); });
+  g('fX').addEventListener('input',function(){ setProp('x',+this.value); });
+  g('fY').addEventListener('input',function(){ setProp('y',+this.value); });
+  g('fW').addEventListener('input',function(){ setProp('w',Math.max(4,+this.value)); });
+  g('fH').addEventListener('input',function(){ setProp('h',Math.max(4,+this.value)); });
+  g('fRot').addEventListener('input',function(){ setProp('rot',+this.value); });
+  g('fBg').addEventListener('input',function(){ setProp('bg',this.value); });
+  g('fColor').addEventListener('input',function(){ setProp('color',this.value); });
+  g('fFS').addEventListener('input',function(){ setProp('fs',+this.value); });
+  g('fRad').addEventListener('input',function(){ setProp('rad',+this.value); });
+  g('fOp').addEventListener('input',function(){ setProp('op',+this.value); });
+  g('fShad').addEventListener('change',function(){ setProp('shadow',this.value); });
+  g('fBorder').addEventListener('change',function(){ setProp('border',this.value); });
+  g('fType').addEventListener('change',function(){
+    setProp('type',this.value);
+    g('imgField').style.display = this.value==='image'?'block':'none';
+    g('editHtmlField').style.display = this.value==='html'?'block':'none';
+    if(this.value==='html'){ var e=getSel(); if(e) openHtmlEditor(e); }
+  });
+  g('fImg').addEventListener('input',function(){ setProp('imgSrc',this.value); });
+  g('editHtmlBtn').addEventListener('click',function(){ var e=getSel(); if(e) openHtmlEditor(e); });
+  var cc = g('fCustomCss');
+  if(cc) cc.addEventListener('input',function(){ setProp('customCss', this.value); });
+}
+
+/* ════════════════════════════
+   UI COMPONENTS LIBRARY
+════════════════════════════ */
+var COMPONENTS={
+  forms:[
+    {label:'زر أساسي',icon:'🔘',w:160,h:44,html:'<button style="width:100%;height:100%;background:#7c3aed;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;font-family:Tajawal,sans-serif;transition:all .2s;" onmouseover="this.style.background=\'#6d28d9\'" onmouseout="this.style.background=\'#7c3aed\'">اضغط هنا</button>',preview:'<button style="padding:5px 14px;background:#7c3aed;color:#fff;border:none;border-radius:6px;font-size:11px;font-family:sans-serif;">زر</button>'},
+    {label:'زر ثانوي',icon:'🔲',w:160,h:44,html:'<button style="width:100%;height:100%;background:transparent;color:#7c3aed;border:2px solid #7c3aed;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;font-family:Tajawal,sans-serif;transition:all .2s;" onmouseover="this.style.background=\'#7c3aed22\'" onmouseout="this.style.background=\'transparent\'">زر ثانوي</button>',preview:'<button style="padding:5px 14px;background:transparent;color:#7c3aed;border:2px solid #7c3aed;border-radius:6px;font-size:11px;font-family:sans-serif;">ثانوي</button>'},
+    {label:'حقل نص',icon:'✏️',w:220,h:44,html:'<input type="text" placeholder="اكتب هنا..." style="width:100%;height:100%;padding:0 14px;border:2px solid #d1d5db;border-radius:8px;font-size:14px;font-family:Tajawal,sans-serif;outline:none;transition:border .2s;box-sizing:border-box;" onfocus="this.style.borderColor=\'#7c3aed\'" onblur="this.style.borderColor=\'#d1d5db\'">',preview:'<input placeholder="اكتب..." style="padding:4px 8px;border:1.5px solid #7c3aed;border-radius:5px;font-size:11px;width:90%;">'},
+    {label:'منطقة نص',icon:'📄',w:240,h:110,html:'<textarea placeholder="اكتب رسالتك هنا..." style="width:100%;height:100%;padding:10px 14px;border:2px solid #d1d5db;border-radius:8px;font-size:14px;font-family:Tajawal,sans-serif;outline:none;resize:none;box-sizing:border-box;" onfocus="this.style.borderColor=\'#7c3aed\'" onblur="this.style.borderColor=\'#d1d5db\'"></textarea>',preview:'<div style="width:90%;height:28px;border:1.5px solid #ccc;border-radius:5px;"></div>'},
+    {label:'قائمة منسدلة',icon:'📋',w:200,h:44,html:'<select style="width:100%;height:100%;padding:0 14px;border:2px solid #d1d5db;border-radius:8px;font-size:14px;font-family:Tajawal,sans-serif;background:#fff;cursor:pointer;outline:none;box-sizing:border-box;"><option value="">اختار خياراً...</option><option value="1">الخيار الأول</option><option value="2">الخيار الثاني</option></select>',preview:'<select style="padding:4px 8px;border:1.5px solid #ccc;border-radius:5px;font-size:11px;width:90%;"><option>اختار...</option></select>'},
+    {label:'خانة اختيار',icon:'☑️',w:180,h:36,html:'<label style="display:flex;align-items:center;gap:10px;font-family:Tajawal,sans-serif;font-size:15px;cursor:pointer;padding:0 8px;"><input type="checkbox" style="width:18px;height:18px;accent-color:#7c3aed;cursor:pointer;"><span>أوافق على الشروط</span></label>',preview:'<label style="display:flex;align-items:center;gap:5px;font-size:11px;"><input type="checkbox" style="accent-color:#7c3aed;"><span>موافق</span></label>'},
+    {label:'رفع ملف',icon:'📁',w:220,h:60,html:'<label style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:2px dashed #7c3aed;border-radius:10px;cursor:pointer;height:100%;font-family:Tajawal,sans-serif;color:#7c3aed;font-size:13px;" onmouseover="this.style.background=\'#7c3aed11\'" onmouseout="this.style.background=\'transparent\'"><span style="font-size:20px;">📎</span><span>اسحب ملف أو انقر للرفع</span><input type="file" style="display:none;"></label>',preview:'<div style="border:1.5px dashed #7c3aed;border-radius:5px;padding:4px 8px;font-size:10px;color:#7c3aed;">📎 رفع ملف</div>'},
+  ],
+  ui:[
+    {label:'كارد',icon:'🃏',w:240,h:130,html:'<div style="background:#fff;border-radius:12px;padding:18px;box-shadow:0 4px 20px rgba(0,0,0,.1);font-family:Tajawal,sans-serif;height:100%;box-sizing:border-box;"><h3 style="margin:0 0 8px;color:#1f2937;font-size:16px;">عنوان الكارد</h3><p style="margin:0;color:#6b7280;font-size:13px;line-height:1.6;">وصف مختصر للمحتوى يمكن تعديله كما تشاء.</p></div>',preview:'<div style="background:#fff;border-radius:5px;padding:6px;box-shadow:0 2px 6px rgba(0,0,0,.1);font-size:9px;"><b>عنوان</b><p style="margin:2px 0 0;color:#888;">نص وصف</p></div>'},
+    {label:'Badge',icon:'🏷️',w:100,h:32,html:'<span style="display:inline-flex;align-items:center;background:#7c3aed;color:#fff;padding:0 14px;border-radius:20px;font-family:Tajawal,sans-serif;font-size:13px;font-weight:700;height:100%;">جديد ✨</span>',preview:'<span style="background:#7c3aed;color:#fff;padding:2px 8px;border-radius:10px;font-size:10px;">جديد</span>'},
+    {label:'تنبيه ناجح',icon:'✅',w:280,h:52,html:'<div style="display:flex;align-items:center;gap:10px;background:#d1fae5;border:1px solid #6ee7b7;border-radius:10px;padding:0 16px;height:100%;font-family:Tajawal,sans-serif;font-size:14px;color:#065f46;"><span style="font-size:18px;">✅</span><span>تمت العملية بنجاح!</span></div>',preview:'<div style="background:#d1fae5;border-radius:5px;padding:4px 8px;font-size:10px;color:#065f46;">✅ نجاح</div>'},
+    {label:'شريط تقدم',icon:'📊',w:240,h:54,html:'<div style="padding:0 12px;height:100%;display:flex;flex-direction:column;justify-content:center;font-family:Tajawal,sans-serif;"><div style="display:flex;justify-content:space-between;font-size:13px;color:#374151;margin-bottom:6px;"><span>التقدم</span><span>70%</span></div><div style="background:#e5e7eb;border-radius:99px;height:10px;overflow:hidden;"><div style="background:linear-gradient(90deg,#7c3aed,#a78bfa);width:70%;height:100%;border-radius:99px;"></div></div></div>',preview:'<div style="font-size:9px;padding:0 2px;"><div style="background:#e5e7eb;border-radius:5px;height:6px;"><div style="background:#7c3aed;width:70%;height:6px;border-radius:5px;"></div></div></div>'},
+    {label:'بطاقة إحصاء',icon:'📈',w:180,h:90,html:'<div style="background:linear-gradient(135deg,#7c3aed,#a78bfa);border-radius:12px;padding:16px;height:100%;box-sizing:border-box;font-family:Tajawal,sans-serif;color:#fff;display:flex;flex-direction:column;justify-content:space-between;"><div style="font-size:13px;opacity:.85;">إجمالي المبيعات</div><div style="font-size:28px;font-weight:900;">١٢,٥٠٠</div><div style="font-size:12px;opacity:.8;">↑ 12% من الشهر الماضي</div></div>',preview:'<div style="background:linear-gradient(135deg,#7c3aed,#a78bfa);border-radius:5px;padding:5px;font-size:9px;color:#fff;"><div>مبيعات</div><div style="font-size:13px;font-weight:700;">١٢,٥٠٠</div></div>'},
+  ],
+  layout:[
+    {label:'فاصل خط',icon:'➖',w:300,h:20,html:'<div style="display:flex;align-items:center;height:100%;width:100%;padding:0 10px;"><div style="flex:1;height:1px;background:linear-gradient(90deg,transparent,#e5e7eb,transparent);"></div></div>',preview:'<div style="height:1px;background:#e5e7eb;width:90%;margin:auto;"></div>'},
+    {label:'Tabs',icon:'📑',w:280,h:44,html:'<div style="display:flex;border-bottom:2px solid #e5e7eb;height:100%;font-family:Tajawal,sans-serif;"><div onclick="[...this.parentElement.children].forEach(function(t){t.style.borderBottom=\'2px solid transparent\';t.style.color=\'#9ca3af\'});this.style.borderBottom=\'2px solid #7c3aed\';this.style.color=\'#7c3aed\'" style="padding:0 16px;cursor:pointer;border-bottom:2px solid #7c3aed;color:#7c3aed;display:flex;align-items:center;font-size:14px;font-weight:600;margin-bottom:-2px;">الأول</div><div onclick="[...this.parentElement.children].forEach(function(t){t.style.borderBottom=\'2px solid transparent\';t.style.color=\'#9ca3af\'});this.style.borderBottom=\'2px solid #7c3aed\';this.style.color=\'#7c3aed\'" style="padding:0 16px;cursor:pointer;color:#9ca3af;display:flex;align-items:center;font-size:14px;margin-bottom:-2px;">الثاني</div></div>',preview:'<div style="display:flex;border-bottom:1px solid #e5e7eb;gap:0;font-size:10px;"><span style="padding:2px 8px;border-bottom:2px solid #7c3aed;color:#7c3aed;">أول</span><span style="padding:2px 8px;color:#999;">ثاني</span></div>'},
+    {label:'Accordion',icon:'🪗',w:280,h:48,html:'<div style="border:1px solid #e5e7eb;border-radius:10px;overflow:hidden;font-family:Tajawal,sans-serif;"><div onclick="var c=this.nextElementSibling;var a=this.querySelector(\'.arr\');c.style.display=c.style.display===\'block\'?\'none\':\'block\';a.style.transform=c.style.display===\'block\'?\'rotate(180deg)\':\'rotate(0deg)\'" style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;cursor:pointer;background:#f9fafb;font-size:14px;font-weight:600;color:#374151;"><span>سؤال شائع؟</span><span class="arr" style="transition:transform .2s;">▼</span></div><div style="display:none;padding:12px 16px;font-size:13px;color:#6b7280;background:#fff;border-top:1px solid #e5e7eb;">هذا هو الجواب على السؤال الشائع.</div></div>',preview:'<div style="border:1px solid #e5e7eb;border-radius:5px;font-size:10px;overflow:hidden;"><div style="padding:4px 8px;background:#f9fafb;display:flex;justify-content:space-between;"><span>سؤال؟</span><span>▼</span></div></div>'},
+  ],
+  media:[
+    {label:'صورة مع تأثير',icon:'🖼️',w:200,h:140,html:'<div style="width:100%;height:100%;overflow:hidden;border-radius:10px;position:relative;" onmouseenter="this.querySelector(\'img\').style.transform=\'scale(1.05)\'" onmouseleave="this.querySelector(\'img\').style.transform=\'scale(1)\'"><img src="https://picsum.photos/seed/42/400/300" style="width:100%;height:100%;object-fit:cover;transition:transform .4s ease;"></div>',preview:'<div style="width:100%;height:100%;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:4px;overflow:hidden;"><img src="https://picsum.photos/seed/42/80/50" style="width:100%;height:100%;object-fit:cover;opacity:.8;"></div>'},
+    {label:'فيديو يوتيوب',icon:'▶️',w:280,h:158,html:'<div style="width:100%;height:100%;border-radius:10px;overflow:hidden;"><iframe width="100%" height="100%" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allowfullscreen style="display:block;"></iframe></div>',preview:'<div style="width:100%;height:100%;background:#000;border-radius:4px;display:flex;align-items:center;justify-content:center;color:#f00;font-size:16px;">▶</div>'},
+  ],
+  nav:[
+    {label:'شريط تنقل',icon:'🧭',w:400,h:56,html:'<nav style="display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:100%;background:#fff;border-bottom:1px solid #e5e7eb;font-family:Tajawal,sans-serif;"><div style="font-size:18px;font-weight:900;color:#7c3aed;">شعار</div><div style="display:flex;gap:20px;"><a href="#" style="color:#374151;text-decoration:none;font-size:14px;">الرئيسية</a><a href="#" style="color:#374151;text-decoration:none;font-size:14px;">خدماتنا</a></div><button style="padding:7px 18px;background:#7c3aed;color:#fff;border:none;border-radius:7px;font-family:Tajawal,sans-serif;cursor:pointer;font-size:13px;">تواصل</button></nav>',preview:'<div style="display:flex;align-items:center;justify-content:space-between;padding:0 6px;height:100%;font-size:9px;border-bottom:1px solid #e5e7eb;"><b style="color:#7c3aed;">شعار</b><span>روابط</span><button style="padding:1px 5px;background:#7c3aed;color:#fff;border:none;border-radius:3px;">تواصل</button></div>'},
+  ],
+};
+
+function initComponents(){
+  var btn = document.getElementById('t-components');
+  var drawer = document.getElementById('comp-drawer');
+  var closeBtn = document.getElementById('comp-close');
+  btn.addEventListener('click',function(){
+    var open = drawer.style.display==='flex';
+    drawer.style.display = open?'none':'flex';
+    btn.classList.toggle('on', !open);
+    if(!open) renderCompCategory('forms');
+  });
+  closeBtn.addEventListener('click',function(){ drawer.style.display='none'; btn.classList.remove('on'); });
+  document.querySelectorAll('.comp-cat').forEach(function(tab){
+    tab.addEventListener('click',function(){
+      document.querySelectorAll('.comp-cat').forEach(function(t){ t.classList.remove('on'); });
+      tab.classList.add('on');
+      renderCompCategory(tab.dataset.cat);
+    });
+  });
+}
+
+function renderCompCategory(cat){
+  var grid = document.getElementById('comp-grid');
+  grid.innerHTML = '';
+  var items = COMPONENTS[cat]||[];
+  items.forEach(function(comp){
+    var card = document.createElement('div'); card.className='comp-card'; card.title='إضافة: '+comp.label;
+    var preview = document.createElement('div'); preview.className='comp-preview'; preview.innerHTML=comp.preview||'';
+    var label = document.createElement('div'); label.className='comp-label'; label.textContent=comp.label;
+    card.appendChild(preview); card.appendChild(label);
+    card.addEventListener('click',function(){
+      var e = makeEl('html'); e.w=comp.w||200; e.h=comp.h||80; e.bg='transparent';
+      e.htmlContent=comp.html; e.htmlCss=''; e.text=comp.label;
+      e.x=60+Math.floor(Math.random()*100); e.y=60+Math.floor(Math.random()*100);
+      get_els().push(e); selIds=new Set([e.id]); saveH(); renderAll(); toast('➕ '+comp.label);
+    });
+    grid.appendChild(card);
+  });
+}
+
+/* ════════════════════════════
+   HTML EDITOR
+════════════════════════════ */
+var htmlSnippets=[
+  {label:'زر',code:'<button style="padding:8px 20px;background:#7c3aed;color:#fff;border:none;border-radius:8px;font-size:14px;cursor:pointer;font-family:Tajawal,sans-serif;">اضغط هنا</button>'},
+  {label:'حقل إدخال',code:'<input type="text" placeholder="اكتب هنا..." style="width:100%;padding:8px 12px;border:2px solid #7c3aed;border-radius:8px;font-size:14px;outline:none;font-family:Tajawal,sans-serif;">'},
+  {label:'عنوان H1',code:'<h1 style="font-family:Tajawal,sans-serif;color:#7c3aed;margin:0;">عنوان رئيسي</h1>'},
+  {label:'فقرة',code:'<p style="font-family:Tajawal,sans-serif;font-size:14px;line-height:1.7;color:#333;margin:0;">هذا نص تجريبي يمكن تعديله كما تشاء.</p>'},
+  {label:'صورة',code:'<img src="https://picsum.photos/300/200" style="width:100%;height:100%;object-fit:cover;border-radius:8px;">'},
+  {label:'Card',code:'<div style="background:#fff;border-radius:12px;padding:16px;box-shadow:0 4px 20px rgba(0,0,0,.1);font-family:Tajawal,sans-serif;"><h3 style="margin:0 0 8px;color:#333;">عنوان الكارد</h3><p style="margin:0;color:#666;font-size:13px;">وصف مختصر للمحتوى هنا.</p></div>'},
+  {label:'iframe',code:'<iframe src="https://www.openstreetmap.org/export/embed.html?bbox=31.2,30.0,31.3,30.1&layer=mapnik" style="width:100%;height:100%;border:none;border-radius:8px;"></iframe>'},
+];
+
+var currentHtmlEl = null;
+function openHtmlEditor(e){
+  currentHtmlEl = e;
+  document.getElementById('html-modal').style.display = 'flex';
+  document.getElementById('htmlCode').value = e.htmlContent||'';
+  document.getElementById('htmlCss').value = e.htmlCss||'';
+  updateHtmlCharCount(); updateHtmlPreview(); buildSnippetsList();
+}
+function buildSnippetsList(){
+  var list = document.getElementById('snippets-list'); list.innerHTML='';
+  htmlSnippets.forEach(function(s){
+    var btn = document.createElement('button'); btn.className='tb-btn'; btn.style.cssText='font-size:10px;padding:3px 8px;'; btn.textContent=s.label;
+    btn.addEventListener('click',function(){
+      var ta=document.getElementById('htmlCode'); var pos=ta.selectionStart; var val=ta.value;
+      ta.value=val.slice(0,pos)+s.code+val.slice(pos); ta.focus(); ta.selectionStart=ta.selectionEnd=pos+s.code.length;
+      updateHtmlCharCount(); updateHtmlPreview();
+    });
+    list.appendChild(btn);
+  });
+}
+function updateHtmlCharCount(){ document.getElementById('htmlCharCount').textContent=document.getElementById('htmlCode').value.length+' حرف'; }
+function updateHtmlPreview(){
+  var code=document.getElementById('htmlCode').value; var css=document.getElementById('htmlCss').value;
+  var frame=document.getElementById('htmlPreviewFrame'); var doc=frame.contentDocument||frame.contentWindow.document;
+  doc.open(); doc.write('<!DOCTYPE html><html dir="rtl"><head><meta charset="UTF-8"><style>body{margin:0;padding:10px;font-family:Tajawal,sans-serif;box-sizing:border-box;}*{box-sizing:border-box;}'+css+'</style></head><body>'+code+'</body></html>'); doc.close();
+}
+document.getElementById('htmlCode').addEventListener('input',function(){ updateHtmlCharCount(); updateHtmlPreview(); });
+document.getElementById('htmlCss').addEventListener('input',function(){ updateHtmlPreview(); });
+document.getElementById('htmlCode').addEventListener('keydown',function(ev){
+  if(ev.key==='Tab'){ ev.preventDefault(); var ta=this; var s=ta.selectionStart,e2=ta.selectionEnd; ta.value=ta.value.substring(0,s)+'  '+ta.value.substring(e2); ta.selectionStart=ta.selectionEnd=s+2; }
+});
+document.getElementById('htmlSnippetBtn').addEventListener('click',function(){
+  var panel=document.getElementById('html-snippets'); panel.style.display=panel.style.display==='none'?'flex':'none';
+});
+document.getElementById('htmlPreviewBtn').addEventListener('click',function(){
+  var side=document.getElementById('html-preview-side'); var showing=side.style.display==='flex';
+  side.style.display=showing?'none':'flex'; this.classList.toggle('on',!showing);
+  if(!showing) updateHtmlPreview();
+});
+document.getElementById('htmlApplyBtn').addEventListener('click',function(){
+  if(!currentHtmlEl) return;
+  currentHtmlEl.htmlContent=document.getElementById('htmlCode').value; currentHtmlEl.htmlCss=document.getElementById('htmlCss').value; currentHtmlEl.text='[HTML]';
+  closeHtmlModal(); saveH(); renderAll(); toast('✓ HTML مُطبَّق');
+});
+document.getElementById('htmlCancelBtn').addEventListener('click',closeHtmlModal);
+document.getElementById('html-modal').addEventListener('click',function(ev){ if(ev.target===this) closeHtmlModal(); });
+function closeHtmlModal(){
+  document.getElementById('html-modal').style.display='none'; document.getElementById('html-snippets').style.display='none';
+  document.getElementById('html-preview-side').style.display='none'; document.getElementById('htmlPreviewBtn').classList.remove('on');
+  currentHtmlEl=null;
+}
+
+/* ════════════════════════════
+   COPY ELEMENT TO OTHER PAGE
+════════════════════════════ */
+document.getElementById('ci-copy-page').addEventListener('click',function(){
+  hideCtx();
+  if(!selIds.size) return;
+  var list = document.getElementById('copy-page-list');
+  list.innerHTML = '';
+  pages.forEach(function(pg, idx){
+    if(idx === currentPageIdx) return;
+    var btn = document.createElement('button');
+    btn.className = 'tb-btn';
+    btn.style.cssText = 'width:100%;justify-content:start;gap:8px;padding:7px 10px;';
+    btn.innerHTML = '<span style="font-family:IBM Plex Mono,monospace;font-size:10px;background:var(--surface3);padding:1px 5px;border-radius:3px;">'+(idx+1)+'</span> '+pg.name;
+    btn.addEventListener('click',function(){
+      selIds.forEach(function(id){
+        var e = getEl(id); if(!e) return;
+        var copy = JSON.parse(JSON.stringify(e));
+        copy.id = 'e'+(idC++);
+        pages[idx].els.push(copy);
+      });
+      document.getElementById('copy-page-modal').style.display = 'none';
+      saveH(); toast('⧉ نُسخ إلى: '+pg.name);
+    });
+    list.appendChild(btn);
+  });
+  if(!list.children.length){
+    list.innerHTML = '<div style="font-size:11px;color:var(--text2);text-align:center;padding:10px;">لا توجد صفحات أخرى</div>';
+  }
+  document.getElementById('copy-page-modal').style.display = 'flex';
+});
+document.getElementById('copy-page-cancel').addEventListener('click',function(){ document.getElementById('copy-page-modal').style.display='none'; });
+document.getElementById('copy-page-modal').addEventListener('click',function(ev){ if(ev.target===this) this.style.display='none'; });
+
+/* ════════════════════════════
+   EVENTS PANEL
+════════════════════════════ */
+function updateEventsPanel(){
+  var e = getSel();
+  document.getElementById('no-sel-ev').style.display = e?'none':'block';
+  document.getElementById('events-form').style.display = e?'block':'none';
+  if(!e) return;
+  var ev = e.events||{clickType:'',clickVal:'',hoverType:'',hoverVal:''};
+  document.getElementById('evClickType').value = ev.clickType||'';
+  document.getElementById('evClickVal').value = ev.clickVal||'';
+  document.getElementById('evHoverType').value = ev.hoverType||'';
+  document.getElementById('evHoverVal').value = ev.hoverVal||'';
+  updateEvLabels();
+}
+function updateEvLabels(){
+  var ct = document.getElementById('evClickType').value;
+  var ht = document.getElementById('evHoverType').value;
+  var cMap = {alert:'نص الرسالة',link:'الرابط (URL)',toggleEl:'ID العنصر',changeColor:'اللون (#hex)',gotoPage:'رقم الصفحة (1,2,...)',custom:'كود JS'};
+  var hMap = {tooltip:'نص التلميح',scaleUp:'',glow:'',changeText:'النص الجديد',custom:'كود JS'};
+  document.getElementById('evClickValLabel').textContent = cMap[ct]||'القيمة';
+  document.getElementById('evHoverValLabel').textContent = hMap[ht]||'القيمة';
+  document.getElementById('evClickValWrap').style.display = ct?'block':'none';
+  document.getElementById('evHoverValWrap').style.display = (ht&&ht!=='scaleUp'&&ht!=='glow')?'block':'none';
+}
+document.getElementById('evClickType').addEventListener('change', updateEvLabels);
+document.getElementById('evHoverType').addEventListener('change', updateEvLabels);
+document.getElementById('applyEvBtn').addEventListener('click',function(){
+  var e = getSel(); if(!e) return;
+  e.events = {clickType:document.getElementById('evClickType').value, clickVal:document.getElementById('evClickVal').value, hoverType:document.getElementById('evHoverType').value, hoverVal:document.getElementById('evHoverVal').value};
+  saveH(); renderAll(); toast('✓ أحداث محفوظة');
+});
+
+/* ════════════════════════════
+   CANVAS SETTINGS
+════════════════════════════ */
+function applyCanvasBg(bg){
+  var b = bg !== undefined ? bg : curPage().cvBg;
+  curPage().cvBg = b;
+  document.getElementById('canvas').style.background = b;
+  updateCanvasInfo();
+}
+
+function updateCanvasInfo(){
+  document.getElementById('cvInfoSize').textContent = CW+' × '+CH;
+  document.getElementById('cvInfoCount').textContent = get_els().length;
+  document.getElementById('cvInfoBg').textContent = (curPage().cvBg||'').length>20?(curPage().cvBg||'').substring(0,20)+'…':curPage().cvBg||'';
+  document.getElementById('cvInfoPages').textContent = pages.length;
+}
+
+document.getElementById('cvPreset').addEventListener('change',function(){
+  if(!this.value) return;
+  var parts = this.value.split(',');
+  document.getElementById('cvW').value = parts[0];
+  document.getElementById('cvH').value = parts[1];
+  this.value = '';
+});
+document.getElementById('cvBgPreset').addEventListener('change',function(){
+  if(!this.value) return;
+  var val = this.value;
+  if(val.startsWith('#')) document.getElementById('cvBgColor').value = val;
+  applyCanvasBg(val);
+  this.value = '';
+});
+document.getElementById('cvBgColor').addEventListener('input',function(){ applyCanvasBg(this.value); });
+document.getElementById('applyCvBgBtn').addEventListener('click',function(){ applyCanvasBg(document.getElementById('cvBgColor').value); toast('✓ خلفية الكنفاس'); });
+document.getElementById('applyCvSizeBtn').addEventListener('click',function(){
+  var nw=Math.max(100,Math.min(3000,+document.getElementById('cvW').value||880));
+  var nh=Math.max(100,Math.min(3000,+document.getElementById('cvH').value||580));
+  CW=nw; CH=nh;
+  var cv=document.getElementById('canvas'); cv.style.width=CW+'px'; cv.style.height=CH+'px';
+  drawGrid(); updateCanvasInfo(); toast('✓ حجم الكنفاس: '+CW+'×'+CH);
+});
+
+/* ════════════════════════════
+   ANIM
+════════════════════════════ */
+function updateAnimPanel(){
+  var e = getSel();
+  document.getElementById('no-sel-anim').style.display = e?'none':'block';
+  document.getElementById('anim-form').style.display = e?'block':'none';
+  if(!e) return;
+  var a = e.anim||{type:'',dur:1,delay:0,iter:'1'};
+  document.getElementById('aType').value = a.type||'';
+  document.getElementById('aDur').value = a.dur||1;
+  document.getElementById('aDelay').value = a.delay||0;
+  document.getElementById('aIter').value = a.iter||'1';
+}
+document.getElementById('applyAnimBtn').addEventListener('click',function(){
+  var e=getSel(); if(!e) return;
+  e.anim={type:document.getElementById('aType').value,dur:+document.getElementById('aDur').value||1,delay:+document.getElementById('aDelay').value||0,iter:document.getElementById('aIter').value||'1'};
+  saveH(); renderAll(); toast('✨ حركة مطبقة');
+});
+
+/* ════════════════════════════
+   TABS
+════════════════════════════ */
+function initTabs(){
+  var devPane = document.getElementById('pane-dev');
+  document.querySelectorAll('.tab').forEach(function(tab){
+    tab.addEventListener('click',function(){
+      document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('on'); });
+      tab.classList.add('on');
+      var target = tab.dataset.pane;
+      document.querySelectorAll('.pane').forEach(function(p){ p.classList.remove('on'); });
+      devPane.style.display = 'none';
+      if(target==='pane-dev'){ devPane.style.display='flex'; renderCode(); }
+      else{ var p=document.getElementById(target); if(p) p.classList.add('on'); }
+      if(target==='pane-events') updateEventsPanel();
+      if(target==='pane-canvas') updateCanvasInfo();
+    });
+  });
+}
+
+/* ════════════════════════════
+   DEV / CODE
+════════════════════════════ */
+function renderCode(){
+  document.getElementById('code').value = JSON.stringify({pages:pages,currentPageIdx:currentPageIdx},null,2);
+}
+document.getElementById('applyCodeBtn').addEventListener('click',function(){
+  try{
+    var data = JSON.parse(document.getElementById('code').value);
+    if(data.pages){ pages=data.pages; currentPageIdx=data.currentPageIdx||0; }
+    else if(Array.isArray(data)){ curPage().els=data; } // fallback: old format
+    saveH(); renderAll(); renderPagesBar(); toast('✓ تم التطبيق');
+  } catch(er){ toast('⚠ JSON خاطئ'); }
+});
+document.getElementById('fmtCodeBtn').addEventListener('click',function(){
+  try{ document.getElementById('code').value=JSON.stringify(JSON.parse(document.getElementById('code').value),null,2); toast('✨ تنسيق'); }
+  catch(er){ toast('⚠ JSON خاطئ'); }
+});
+
+/* ════════════════════════════
+   ACTIONS
+════════════════════════════ */
+function addEl(type){
+  var e = makeEl(type); get_els().push(e); selIds = new Set([e.id]);
+  saveH(); renderAll(); toast('➕ '+type);
+}
+function addElHtml(){
+  var e = makeEl('html'); e.w=250; e.h=120; e.bg='transparent'; e.htmlContent=''; e.htmlCss=''; e.text='[HTML]';
+  get_els().push(e); selIds=new Set([e.id]); saveH(); renderAll(); openHtmlEditor(e);
+}
+function delSelected(){
+  if(!selIds.size) return;
+  curPage().els = get_els().filter(function(e){ return !selIds.has(e.id); });
+  selIds = new Set(); saveH(); renderAll(); toast('🗑 حُذف');
+}
+function dupSelected(){
+  var newEls = [];
+  selIds.forEach(function(id){ var e=getEl(id); if(!e) return; var c=JSON.parse(JSON.stringify(e)); c.id='e'+(idC++); c.x+=20; c.y+=20; newEls.push(c); });
+  curPage().els = get_els().concat(newEls);
+  selIds = new Set(newEls.map(function(e){ return e.id; }));
+  saveH(); renderAll(); toast('⧉ نُسخ');
+}
+function bringFwd(){ selIds.forEach(function(id){ layerMove(id,-1); }); }
+function sendBwd(){ selIds.forEach(function(id){ layerMove(id,1); }); }
+
+function alignEls(dir){
+  if(selIds.size<2){ toast('حدد عنصرين على الأقل'); return; }
+  var es = get_els().filter(function(e){ return selIds.has(e.id); });
+  var minX=Math.min.apply(null,es.map(function(e){ return e.x; }));
+  var maxX=Math.max.apply(null,es.map(function(e){ return e.x+e.w; }));
+  var minY=Math.min.apply(null,es.map(function(e){ return e.y; }));
+  var maxY=Math.max.apply(null,es.map(function(e){ return e.y+e.h; }));
+  es.forEach(function(e){
+    if(dir==='left') e.x=minX; else if(dir==='right') e.x=maxX-e.w;
+    else if(dir==='center') e.x=minX+(maxX-minX)/2-e.w/2;
+    else if(dir==='top') e.y=minY; else if(dir==='bottom') e.y=maxY-e.h;
+    else if(dir==='middle') e.y=minY+(maxY-minY)/2-e.h/2;
+  });
+  saveH(); renderAll(); toast('محاذاة ✓');
+}
+
+function groupSel(){
+  if(selIds.size<2){ toast('حدد عنصرين+'); return; }
+  var gid = 'g'+(idC++);
+  selIds.forEach(function(id){ var e=getEl(id); if(e) e.group=gid; });
+  saveH(); renderAll(); toast('⊞ تجميع');
+}
+function ungroupSel(){
+  selIds.forEach(function(id){ var e=getEl(id); if(e) e.group=null; });
+  saveH(); renderAll(); toast('⊟ فك');
+}
+
+/* ════════════════════════════
+   EXPORT HTML (Multi-page)
+════════════════════════════ */
+function exportHTML(mode){
+  mode = mode || 'absolute';
+  var keyframes = '@keyframes fadeIn{from{opacity:0}to{opacity:1}}\n@keyframes slideIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}\n@keyframes bounce{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}\n@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}\n@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}\n';
+
+  function buildPageBody(pg){
+    var body = '';
+    var els = pg.els.filter(function(e){ return e.visible!==false; }).slice();
+    // For flex/grid, sort by top-then-left so DOM order matches visual order
+    if(mode==='flex'||mode==='grid'){
+      els.sort(function(a,b){ return (a.y-b.y) || (a.x-b.x); });
+    }
+    els.forEach(function(e){
+      var posCss;
+      if(mode==='absolute'){
+        posCss = 'position:absolute;left:'+e.x+'px;top:'+e.y+'px;width:'+e.w+'px;height:'+(e.type==='line'?4:e.h)+'px;';
+      } else if(mode==='responsive'){
+        var lp=(e.x/CW*100).toFixed(2), tp=(e.y/CH*100).toFixed(2);
+        var wp=(e.w/CW*100).toFixed(2), hp=(e.h/CH*100).toFixed(2);
+        posCss = 'position:absolute;left:'+lp+'%;top:'+tp+'%;width:'+wp+'%;height:'+hp+'%;';
+      } else if(mode==='flex'){
+        posCss = 'position:relative;width:'+e.w+'px;height:'+(e.type==='line'?4:e.h)+'px;margin:6px;flex-shrink:0;';
+      } else if(mode==='grid'){
+        var colStart = Math.max(1, Math.round(e.x/CW*12)+1);
+        var colSpan = Math.max(1, Math.min(13-colStart, Math.round(e.w/CW*12)));
+        posCss = 'grid-column:'+colStart+' / span '+colSpan+';height:'+(e.type==='line'?4:e.h)+'px;min-width:0;';
+      }
+      var st = posCss + 'transform:rotate('+(e.rot||0)+'deg);opacity:'+(e.op!=null?e.op:1)+';font-size:'+(e.fs||15)+'px;font-family:Tajawal,sans-serif;font-weight:600;display:flex;align-items:center;justify-content:center;color:'+(e.color||'#fff')+';';
+      if(e.type==='circle') st+='background:'+(e.bg||'#888')+';border-radius:50%;';
+      else if(e.type==='text') st+='background:transparent;color:'+(e.bg||'#111')+';';
+      else if(e.type==='line') st+='background:transparent;border-bottom:3px solid '+(e.bg||'#555')+';';
+      else if(e.type==='image') st+='background:url('+(e.imgSrc||'')+') center/cover no-repeat;border-radius:'+(e.rad||0)+'px;';
+      else if(e.type==='html') st+='background:'+(e.bg||'transparent')+';border-radius:'+(e.rad||0)+'px;overflow:auto;display:block;';
+      else st+='background:'+(e.bg||'#888')+';border-radius:'+(e.rad||0)+'px;';
+      if(e.shadow) st+='box-shadow:'+e.shadow+';';
+      if(e.border) st+='border:'+e.border+';';
+      if(e.anim&&e.anim.type) st+='animation:'+e.anim.type+' '+e.anim.dur+'s '+e.anim.delay+'s '+e.anim.iter+' ease-in-out both;';
+      if(e.customCss) st+=e.customCss.replace(/\s+/g,' ')+';';
+      var inner;
+      if(e.type==='image') inner='<img src="'+e.imgSrc+'" style="width:100%;height:100%;object-fit:cover;">';
+      else if(e.type==='html') inner=(e.htmlCss?'<style>'+e.htmlCss+'</style>':'')+(e.htmlContent||'');
+      else inner=(e.text||'');
+
+      // Click events
+      var ev = e.events||{};
+      var clickAttr = '';
+      if(ev.clickType==='alert') clickAttr='onclick="alert(\''+ev.clickVal+'\');" style="'+st+'cursor:pointer;"';
+      else if(ev.clickType==='link') clickAttr='onclick="window.open(\''+ev.clickVal+'\',\'_blank\');" style="'+st+'cursor:pointer;"';
+      else if(ev.clickType==='gotoPage') clickAttr='onclick="showPage('+(parseInt(ev.clickVal)-1)+');" style="'+st+'cursor:pointer;"';
+      else if(ev.clickType==='custom') clickAttr='onclick="'+ev.clickVal+'" style="'+st+'cursor:pointer;"';
+      else clickAttr='style="'+st+'"';
+
+      body += '<div '+clickAttr+' data-eid="'+e.id+'">'+inner+'</div>\n';
+    });
+    return body;
+  }
+
+  // Build page data
+  var pagesData = pages.map(function(pg, i){ return {name:pg.name, bg:pg.cvBg, body:buildPageBody(pg)}; });
+
+  // Navigation bar HTML
+  var navBtns = pagesData.map(function(pg, i){
+    return '<button onclick="showPage('+i+')" id="nav-'+i+'" style="padding:6px 14px;border-radius:6px;font-size:12px;font-family:Tajawal,sans-serif;cursor:pointer;border:1px solid rgba(255,255,255,.2);background:'+(i===0?'#7c3aed':'rgba(255,255,255,.1)')+';color:#fff;transition:.15s;">'+pg.name+'</button>';
+  }).join('\n');
+
+  var pagesScript = '';
+  pagesData.forEach(function(pg, i){
+    pagesScript += 'pages['+i+'] = '+JSON.stringify({bg:pg.bg, body:pg.body})+';\n';
+  });
+
+  // Container CSS varies by mode
+  var cvCss;
+  if(mode==='absolute'){
+    cvCss = '#cv{width:'+CW+'px;height:'+CH+'px;position:relative;overflow:hidden;transition:background .3s;max-width:100%;}';
+  } else if(mode==='responsive'){
+    var ratio = (CH/CW*100).toFixed(2);
+    cvCss = '#cv{width:100%;max-width:'+CW+'px;aspect-ratio:'+CW+'/'+CH+';position:relative;overflow:hidden;transition:background .3s;}\n@media(max-width:480px){#cv *{font-size:90%;}}';
+  } else if(mode==='flex'){
+    cvCss = '#cv{width:100%;max-width:'+CW+'px;min-height:200px;position:relative;display:flex;flex-direction:row;flex-wrap:wrap;justify-content:flex-start;align-items:flex-start;padding:12px;transition:background .3s;}\n@media(max-width:768px){#cv{flex-direction:column;align-items:stretch;}#cv > div{width:100% !important;margin:6px 0 !important;}}';
+  } else if(mode==='grid'){
+    cvCss = '#cv{width:100%;max-width:'+CW+'px;display:grid;grid-template-columns:repeat(12,1fr);gap:8px;padding:12px;transition:background .3s;position:relative;}\n@media(max-width:768px){#cv{grid-template-columns:repeat(4,1fr);}#cv > div{grid-column:1/-1 !important;}}';
+  }
+
+  var html = '<!DOCTYPE html>\n<html lang="ar" dir="rtl">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width,initial-scale=1">\n<title>Project — '+pages.length+' صفحة ('+mode+')</title>\n<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">\n<style>\n*{box-sizing:border-box;margin:0;padding:0;}\nbody{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-height:100vh;background:#0a0a0d;gap:10px;padding:10px;font-family:Tajawal,sans-serif;}\n'+cvCss+'\n#nav{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;padding:6px;}'+(pages.length<=1?'#nav{display:none}':'')+'\n'+keyframes+'</style>\n</head>\n<body>\n<div id="nav">\n'+navBtns+'\n</div>\n<div id="cv"></div>\n<script>\nvar pages=[];\n'+pagesScript+'\nvar curPage=0;\nfunction showPage(idx){\n  if(idx<0||idx>=pages.length)return;\n  curPage=idx;\n  var cv=document.getElementById(\'cv\');\n  cv.style.background=pages[idx].bg||\'#fff\';\n  cv.innerHTML=pages[idx].body;\n  document.querySelectorAll(\'[id^=nav-]\').forEach(function(b,i){b.style.background=i===idx?\'#7c3aed\':\'rgba(255,255,255,.1)\';});\n  cv.querySelectorAll(\'script\').forEach(function(s){eval(s.textContent);});\n}\nshowPage(0);\n<\/script>\n</body>\n</html>';
+
+  dload('project-'+mode+'.html', html, 'text/html');
+  toast('⬇ HTML exported ['+mode+']');
+}
+
+/* Export modal */
+function showExportModal(){
+  var m = document.getElementById('exp-modal'); m.classList.add('show');
+  document.querySelectorAll('.exp-opt').forEach(function(o){ o.classList.remove('on'); });
+  var first = document.querySelector('.exp-opt[data-mode="absolute"]'); if(first) first.classList.add('on');
+}
+
+function exportJSON(){
+  dload('project.json', JSON.stringify({pages:pages, cvW:CW, cvH:CH}, null, 2), 'application/json');
+  toast('⬇ JSON exported');
+}
+function dload(name, content, type){
+  var a = document.createElement('a'); a.href=URL.createObjectURL(new Blob([content],{type:type})); a.download=name; a.click();
+}
+document.getElementById('importJSONBtn').addEventListener('click',function(){ document.getElementById('jsonFile').click(); });
+document.getElementById('jsonFile').addEventListener('change',function(ev){
+  var f = ev.target.files[0]; if(!f) return;
+  var r = new FileReader();
+  r.onload = function(e){
+    try{
+      var data = JSON.parse(e.target.result);
+      if(data.pages){ pages=data.pages; if(data.cvW) CW=data.cvW; if(data.cvH) CH=data.cvH; currentPageIdx=0; }
+      else if(Array.isArray(data)){ pages=[{id:'p1',name:'الصفحة 1',els:data,cvBg:'#ffffff'}]; } // legacy
+      var cv=document.getElementById('canvas'); cv.style.width=CW+'px'; cv.style.height=CH+'px';
+      applyCanvasBg(curPage().cvBg);
+      saveH(); renderAll(); renderPagesBar(); toast('✓ فُتح — '+pages.length+' صفحة');
+    } catch(er){ toast('⚠ ملف خاطئ'); }
+  };
+  r.readAsText(f); ev.target.value='';
+});
+
+/* ════════════════════════════
+   PREVIEW (Multi-page)
+════════════════════════════ */
+var prevPageIdx = 0;
+
+function showPreview(startPage){
+  prevPageIdx = startPage || 0;
+  renderPreviewPage(prevPageIdx);
+  document.getElementById('prev').classList.add('show');
+
+  // Show page nav if multiple pages
+  var nav = document.getElementById('prev-pages-nav');
+  nav.style.display = pages.length > 1 ? 'flex' : 'none';
+  renderPreviewPageBtns();
+}
+
+function renderPreviewPage(idx){
+  var inner = document.getElementById('prev-inner');
+  inner.style.width = CW+'px'; inner.style.height = (CH + (pages.length>1?40:0))+'px';
+
+  // Remove old canvas content (keep nav and close btn)
+  var wrap = inner.querySelector('#prev-wrap');
+  if(wrap) wrap.remove();
+
+  var pg = pages[idx];
+  var w = document.createElement('div');
+  w.id = 'prev-wrap';
+  w.style.cssText = 'position:absolute;top:0;left:0;right:0;bottom:'+(pages.length>1?'40px':'0')+';overflow:hidden;';
+  w.style.background = pg.cvBg||'#fff';
+
+  pg.els.filter(function(e){ return e.visible!==false; }).forEach(function(e){
+    var div = document.createElement('div');
+    applyElStyle(div, e); div.style.cursor='default';
+    if(e.type==='image'){
+      var img=document.createElement('img'); img.src=e.imgSrc||'';
+      img.style.cssText='width:100%;height:100%;object-fit:cover;border-radius:inherit;'; div.appendChild(img);
+    } else if(e.type==='html'){
+      var hw=document.createElement('div'); hw.style.cssText='width:100%;height:100%;overflow:auto;';
+      if(e.htmlCss){ var st=document.createElement('style'); st.textContent=e.htmlCss; hw.appendChild(st); }
+      var tmp=document.createElement('div'); tmp.innerHTML=e.htmlContent||'';
+      Array.from(tmp.childNodes).forEach(function(n){ hw.appendChild(n.cloneNode(true)); });
+      div.appendChild(hw);
+    } else { div.innerText=e.text||''; }
+
+    var ev = e.events||{};
+    if(ev.clickType){
+      div.style.cursor = 'pointer';
+      div.addEventListener('click', function(){
+        if(ev.clickType==='alert') alert(ev.clickVal||'تم الضغط!');
+        else if(ev.clickType==='link') window.open(ev.clickVal||'#','_blank');
+        else if(ev.clickType==='gotoPage'){
+          var targetIdx = parseInt(ev.clickVal)-1;
+          if(!isNaN(targetIdx)&&targetIdx>=0&&targetIdx<pages.length){ prevPageIdx=targetIdx; renderPreviewPage(prevPageIdx); renderPreviewPageBtns(); }
+        }
+        else if(ev.clickType==='toggleEl'){ var tgt=w.querySelector('[data-eid="'+ev.clickVal+'"]'); if(tgt) tgt.style.display=tgt.style.display==='none'?'flex':'none'; }
+        else if(ev.clickType==='changeColor') div.style.background=ev.clickVal||'#f00';
+        else if(ev.clickType==='custom'){ try{var fn=new Function(ev.clickVal);fn.call(div);}catch(er){alert('خطأ: '+er);} }
+      });
+    }
+    if(ev.hoverType){
+      var origTransform=div.style.transform; var origShadow=div.style.boxShadow; var origText=div.innerText; var tooltip=null;
+      div.style.transition='all 0.2s ease';
+      div.addEventListener('mouseenter',function(){
+        if(ev.hoverType==='scaleUp') div.style.transform=origTransform+' scale(1.08)';
+        else if(ev.hoverType==='glow') div.style.boxShadow=(origShadow?origShadow+',':'')+' 0 0 20px rgba(124,58,237,.7)';
+        else if(ev.hoverType==='changeText'&&ev.hoverVal) div.innerText=ev.hoverVal;
+        else if(ev.hoverType==='tooltip'&&ev.hoverVal){ tooltip=document.createElement('div'); tooltip.style.cssText='position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:4px 10px;border-radius:6px;font-size:11px;white-space:nowrap;pointer-events:none;z-index:100;font-family:Tajawal,sans-serif;'; tooltip.textContent=ev.hoverVal; div.appendChild(tooltip); }
+      });
+      div.addEventListener('mouseleave',function(){
+        if(ev.hoverType==='scaleUp') div.style.transform=origTransform;
+        else if(ev.hoverType==='glow') div.style.boxShadow=origShadow;
+        else if(ev.hoverType==='changeText') div.innerText=origText;
+        else if(ev.hoverType==='tooltip'&&tooltip){ tooltip.remove(); tooltip=null; }
+      });
+    }
+    div.dataset.eid = e.id;
+    w.appendChild(div);
+  });
+  inner.insertBefore(w, inner.querySelector('#prev-pages-nav'));
+}
+
+function renderPreviewPageBtns(){
+  var btns = document.getElementById('prev-page-btns');
+  btns.innerHTML = '';
+  pages.forEach(function(pg, i){
+    var b = document.createElement('button');
+    b.className = 'prev-page-btn' + (i===prevPageIdx?' active':'');
+    b.textContent = pg.name;
+    b.addEventListener('click',function(){ prevPageIdx=i; renderPreviewPage(i); renderPreviewPageBtns(); });
+    btns.appendChild(b);
+  });
+}
+
+document.getElementById('prev-prev-page').addEventListener('click',function(){
+  if(prevPageIdx > 0){ prevPageIdx--; renderPreviewPage(prevPageIdx); renderPreviewPageBtns(); }
+});
+document.getElementById('prev-next-page').addEventListener('click',function(){
+  if(prevPageIdx < pages.length-1){ prevPageIdx++; renderPreviewPage(prevPageIdx); renderPreviewPageBtns(); }
+});
+
+/* ════════════════════════════
+   CONTEXT MENU
+════════════════════════════ */
+function showCtx(x, y){
+  var m = document.getElementById('ctx');
+  m.style.display='block'; m.style.left=x+'px'; m.style.top=y+'px';
+}
+function hideCtx(){ document.getElementById('ctx').style.display='none'; }
+document.addEventListener('click',function(){ hideCtx(); });
+
+/* ════════════════════════════
+   TOAST
+════════════════════════════ */
+var toastT;
+function toast(msg){
+  var t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastT);
+  toastT = setTimeout(function(){ t.classList.remove('show'); }, 1600);
+}
+
+/* ════════════════════════════
+   KEYBOARD
+════════════════════════════ */
+document.addEventListener('keydown', function(ev){
+  var tag = document.activeElement.tagName;
+  if(tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT') return;
+  if((ev.ctrlKey||ev.metaKey)&&ev.key==='z'){ ev.preventDefault(); undo(); return; }
+  if((ev.ctrlKey||ev.metaKey)&&(ev.key==='y'||ev.key==='Y')){ ev.preventDefault(); redo(); return; }
+  if((ev.ctrlKey||ev.metaKey)&&ev.key==='d'){ ev.preventDefault(); dupSelected(); return; }
+  if((ev.ctrlKey||ev.metaKey)&&ev.key==='a'){ ev.preventDefault(); selIds=new Set(get_els().map(function(e){ return e.id; })); renderAll(); return; }
+  if(ev.key==='Delete'||ev.key==='Backspace'){ delSelected(); return; }
+  if(ev.key==='Escape'){ selIds=new Set(); renderAll(); return; }
+  // Page navigation: Ctrl+[ and Ctrl+]
+  if((ev.ctrlKey||ev.metaKey)&&ev.key==='['){ ev.preventDefault(); if(currentPageIdx>0) switchPage(currentPageIdx-1); return; }
+  if((ev.ctrlKey||ev.metaKey)&&ev.key===']'){ ev.preventDefault(); if(currentPageIdx<pages.length-1) switchPage(currentPageIdx+1); return; }
+  var km = {'v':'sel','r':'rect','c':'circ','t':'text','i':'img','l':'line'};
+  if(km[ev.key.toLowerCase()]){
+    var k = km[ev.key.toLowerCase()];
+    if(k==='sel') document.getElementById('t-sel').click();
+    else document.getElementById('t-'+k).click();
+    return;
+  }
+  var arrows = ['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'];
+  if(arrows.indexOf(ev.key)!==-1){
+    ev.preventDefault();
+    var step = ev.shiftKey?10:1;
+    selIds.forEach(function(id){
+      var e=getEl(id); if(!e) return;
+      if(ev.key==='ArrowLeft') e.x-=step; if(ev.key==='ArrowRight') e.x+=step;
+      if(ev.key==='ArrowUp') e.y-=step; if(ev.key==='ArrowDown') e.y+=step;
+    });
+    renderCanvas(); updateProps();
+  }
+});
+
+/* ════════════════════════════
+   WIRE BUTTONS
+════════════════════════════ */
+function wire(){
+  document.getElementById('mob-panel-btn').addEventListener('click',function(){
+    document.getElementById('left').classList.toggle('open');
+    document.getElementById('left-overlay').classList.toggle('open');
+  });
+  document.getElementById('left-overlay').addEventListener('click',function(){
+    document.getElementById('left').classList.remove('open'); this.classList.remove('open');
+  });
+  document.getElementById('undoBtn').addEventListener('click', undo);
+  document.getElementById('redoBtn').addEventListener('click', redo);
+  document.getElementById('snapBtn').addEventListener('click',function(){ snapOn=!snapOn; this.classList.toggle('on',snapOn); toast(snapOn?'⊞ Snap مفعل':'⊞ Snap معطل'); });
+  document.getElementById('gridBtn').addEventListener('click',function(){ gridOn=!gridOn; this.classList.toggle('on',gridOn); drawGrid(); });
+  document.getElementById('alL').addEventListener('click',function(){ alignEls('left'); });
+  document.getElementById('alC').addEventListener('click',function(){ alignEls('center'); });
+  document.getElementById('alR').addEventListener('click',function(){ alignEls('right'); });
+  document.getElementById('alT').addEventListener('click',function(){ alignEls('top'); });
+  document.getElementById('alM').addEventListener('click',function(){ alignEls('middle'); });
+  document.getElementById('alB').addEventListener('click',function(){ alignEls('bottom'); });
+  document.getElementById('groupBtn').addEventListener('click', groupSel);
+  document.getElementById('ungroupBtn').addEventListener('click', ungroupSel);
+  document.getElementById('prevBtn').addEventListener('click',function(){ showPreview(currentPageIdx); });
+  document.getElementById('exportHTMLBtn').addEventListener('click', showExportModal);
+  // Export modal selection
+  document.querySelectorAll('.exp-opt').forEach(function(o){
+    o.addEventListener('click',function(){
+      document.querySelectorAll('.exp-opt').forEach(function(x){x.classList.remove('on');});
+      o.classList.add('on');
+    });
+  });
+  document.getElementById('expCancelBtn').addEventListener('click',function(){ document.getElementById('exp-modal').classList.remove('show'); });
+  document.getElementById('expConfirmBtn').addEventListener('click',function(){
+    var sel = document.querySelector('.exp-opt.on');
+    var mode = sel ? sel.dataset.mode : 'absolute';
+    document.getElementById('exp-modal').classList.remove('show');
+    exportHTML(mode);
+  });
+  document.getElementById('exp-modal').addEventListener('click',function(ev){
+    if(ev.target===this) this.classList.remove('show');
+  });
+  // Comments wiring
+  wireComments();
+  document.getElementById('exportJSONBtn').addEventListener('click', exportJSON);
+  document.getElementById('darkCvBtn').addEventListener('click',function(){
+    darkCv=!darkCv; document.getElementById('canvas').classList.toggle('dark-cv',darkCv); toast(darkCv?'◑ كنفاس داكن':'◑ كنفاس فاتح');
+  });
+  document.getElementById('zoomIn').addEventListener('click',function(){ setZoom(zoom+0.1); });
+  document.getElementById('zoomOut').addEventListener('click',function(){ setZoom(zoom-0.1); });
+  document.getElementById('zoomReset').addEventListener('click',function(){ setZoom(1); });
+  document.getElementById('t-sel').addEventListener('click',function(){ document.querySelectorAll('.tool').forEach(function(b){ b.classList.remove('on'); }); this.classList.add('on'); });
+  document.getElementById('t-rect').addEventListener('click',function(){ addEl('rect'); });
+  document.getElementById('t-circ').addEventListener('click',function(){ addEl('circle'); });
+  document.getElementById('t-text').addEventListener('click',function(){ addEl('text'); });
+  document.getElementById('t-img').addEventListener('click',function(){ addEl('image'); });
+  document.getElementById('t-line').addEventListener('click',function(){ addEl('line'); });
+  document.getElementById('t-html').addEventListener('click',function(){ addElHtml(); });
+  document.getElementById('t-dup').addEventListener('click', dupSelected);
+  document.getElementById('t-del').addEventListener('click', delSelected);
+  document.getElementById('t-fwd').addEventListener('click', bringFwd);
+  document.getElementById('t-bwd').addEventListener('click', sendBwd);
+  document.getElementById('ci-dup').addEventListener('click',function(){ dupSelected(); hideCtx(); });
+  document.getElementById('ci-grp').addEventListener('click',function(){ groupSel(); hideCtx(); });
+  document.getElementById('ci-ungrp').addEventListener('click',function(){ ungroupSel(); hideCtx(); });
+  document.getElementById('ci-fwd').addEventListener('click',function(){ bringFwd(); hideCtx(); });
+  document.getElementById('ci-bwd').addEventListener('click',function(){ sendBwd(); hideCtx(); });
+  document.getElementById('ci-del').addEventListener('click',function(){ delSelected(); hideCtx(); });
+  document.getElementById('prev-close').addEventListener('click',function(){ document.getElementById('prev').classList.remove('show'); });
+  document.getElementById('prev').addEventListener('click',function(ev){ if(ev.target===this) this.classList.remove('show'); });
+  document.getElementById('canvas').addEventListener('click',function(ev){ if(ev.target.id==='canvas'){ selIds=new Set(); renderAll(); } });
+
+  // Pages bar add button
+  document.getElementById('page-add-btn').addEventListener('click',function(){ addPage(); });
+}
+
+/* ════════════════════════════
+   URL HASH SYNC
+════════════════════════════ */
+var hashSyncTimer = null;
+
+function saveToHash(){
+  try{
+    var state = {pages:pages, cvW:CW, cvH:CH, curIdx:currentPageIdx};
+    var json = JSON.stringify(state);
+    window.history.replaceState(null,'',window.location.pathname+window.location.search+'#'+encodeURIComponent(json));
+    document.getElementById('hashStatus').textContent = '✓ محفوظ';
+    document.getElementById('hashStatus').style.color = 'var(--accent2)';
+  } catch(er){
+    document.getElementById('hashStatus').textContent = '⚠';
+    document.getElementById('hashStatus').style.color = 'var(--danger)';
+  }
+}
+
+function loadFromHash(){
+  try{
+    var hash = window.location.hash;
+    if(!hash||hash.length<3) return false;
+    var json = decodeURIComponent(hash.slice(1));
+    var state = JSON.parse(json);
+    if(state.pages&&Array.isArray(state.pages)){
+      pages = state.pages; currentPageIdx = state.curIdx||0;
+      if(state.cvW) CW=state.cvW; if(state.cvH) CH=state.cvH;
+      var cv = document.getElementById('canvas');
+      cv.style.width=CW+'px'; cv.style.height=CH+'px';
+      applyCanvasBg(curPage().cvBg||'#ffffff');
+      document.getElementById('cvW').value=CW; document.getElementById('cvH').value=CH;
+      document.getElementById('cvBgColor').value=(curPage().cvBg||'#ffffff').startsWith('#')?curPage().cvBg:'#ffffff';
+      return true;
+    }
+    // Legacy: array of elements
+    if(state.els&&Array.isArray(state.els)){
+      pages=[{id:'p1',name:'الصفحة 1',els:state.els,cvBg:state.cvBg||'#ffffff'}]; currentPageIdx=0;
+      if(state.cvW) CW=state.cvW; if(state.cvH) CH=state.cvH;
+      var cv2=document.getElementById('canvas'); cv2.style.width=CW+'px'; cv2.style.height=CH+'px';
+      applyCanvasBg(curPage().cvBg); return true;
+    }
+  } catch(er){}
+  return false;
+}
+
+function scheduleHashSave(){
+  clearTimeout(hashSyncTimer);
+  hashSyncTimer = setTimeout(function(){ saveToHash(); }, 800);
+  document.getElementById('hashStatus').textContent = '○';
+  document.getElementById('hashStatus').style.color = 'var(--text2)';
+}
+
+document.getElementById('copyHashBtn').addEventListener('click',function(){
+  saveToHash();
+  navigator.clipboard.writeText(window.location.href).then(function(){ toast('📋 تم نسخ الرابط!'); }).catch(function(){
+    var ta=document.createElement('textarea'); ta.value=window.location.href; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); toast('📋 تم نسخ الرابط!');
+  });
+});
+document.getElementById('clearHashBtn').addEventListener('click',function(){
+  if(!confirm('هل تريد مسح المشروع والبدء من جديد؟')) return;
+  window.history.replaceState(null,'',window.location.pathname+window.location.search);
+  pages=[{id:'p1',name:'الصفحة 1',els:[],cvBg:'#ffffff'}]; currentPageIdx=0;
+  selIds=new Set(); saveH(); renderAll(); renderPagesBar(); toast('🗑 مسح — بداية جديدة');
+});
+
+/* ════════════════════════════
+   INIT
+════════════════════════════ */
+/* Comments / AI commands list (per-project) */
+function getComments(){ if(!Array.isArray(pages.__comments)){ /* stored separately on first page */ } if(!Array.isArray(pages[0]._comments)) pages[0]._comments=[]; return pages[0]._comments; }
+function renderComments(){
+  var list = document.getElementById('cmt-list'); if(!list) return;
+  var arr = getComments();
+  list.innerHTML = '';
+  document.getElementById('cmtCount').textContent = arr.length;
+  arr.forEach(function(c, i){
+    var it = document.createElement('div'); it.className='cmt-item';
+    var meta = document.createElement('div'); meta.className='cmt-meta';
+    var tag = c.ai ? '<span class="cmt-tag">@AI</span>' : '';
+    meta.innerHTML = '<span>'+tag+(c.date||'')+'</span>';
+    var del = document.createElement('button'); del.className='cmt-del'; del.innerHTML='✕';
+    del.addEventListener('click',function(){ arr.splice(i,1); saveH(); renderComments(); });
+    meta.appendChild(del);
+    var body = document.createElement('div'); body.textContent = c.text;
+    it.appendChild(meta); it.appendChild(body);
+    list.appendChild(it);
+  });
+}
+function addComment(ai){
+  var inp = document.getElementById('cmtInput');
+  var v = (inp.value||'').trim(); if(!v) return;
+  var d = new Date(); var ds = d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0');
+  getComments().push({text:v, ai:!!ai, date:ds});
+  inp.value=''; saveH(); renderComments(); toast(ai?'⚡ أُضيف أمر AI':'💬 أُضيف تعليق');
+}
+function wireComments(){
+  var inp = document.getElementById('cmtInput'); if(!inp) return;
+  document.getElementById('cmtAddBtn').addEventListener('click',function(){ addComment(false); });
+  document.getElementById('cmtAIBtn').addEventListener('click',function(){ addComment(true); });
+  document.getElementById('cmtCopyAllBtn').addEventListener('click',function(){
+    var txt = getComments().map(function(c){ return (c.ai?'[@AI] ':'- ')+c.text; }).join('\n');
+    if(!txt){ toast('لا توجد تعليقات'); return; }
+    navigator.clipboard.writeText(txt).then(function(){ toast('📋 تم النسخ'); }).catch(function(){ toast('📋 '+txt.length+' حرف'); });
+  });
+  inp.addEventListener('keydown',function(ev){
+    if(ev.key==='Enter' && (ev.ctrlKey||ev.metaKey)){ ev.preventDefault(); addComment(false); }
+  });
+  renderComments();
+}
+
+function init(){
+  initTabs(); wire(); bindProps(); initComponents();
+  document.getElementById('snapBtn').classList.add('on');
+
+  var loadedFromHash = loadFromHash();
+
+  if(!loadedFromHash){
+    var e1=makeEl('rect'); e1.text='مرحباً بك!'; e1.x=80; e1.y=80; e1.w=180; e1.h=60;
+    e1.bg='#7c3aed'; e1.color='#fff'; e1.rad=12; e1.fs=18; e1.shadow='0 8px 30px rgba(124,58,237,.5)';
+    get_els().push(e1);
+    var e2=makeEl('circle'); e2.x=320; e2.y=90; e2.w=80; e2.h=80; e2.bg='#06d6a0'; e2.color='#111'; e2.text='✦';
+    get_els().push(e2);
+    var e3=makeEl('text'); e3.x=80; e3.y=200; e3.w=320; e3.h=50; e3.bg='#111'; e3.text='text'; e3.fs=22;
+    get_els().push(e3);
+    var e4=makeEl('image'); e4.x=80; e4.y=280; e4.w=200; e4.h=130; e4.rad=10; e4.imgSrc='https://picsum.photos/seed/42/400/260';
+    get_els().push(e4);
+  }
+
+  saveH(); renderAll(); renderPagesBar(); updateCanvasInfo();
+
+  setTimeout(function(){
+    var canvas_area = document.getElementById('canvas-area');
+    var rect = canvas_area.getBoundingClientRect();
+    var fitX = (rect.width-40)/CW, fitY = (rect.height-60)/CH;
+    var fit = Math.min(fitX, fitY, 1);
+    if(fit<0.9) setZoom(Math.max(0.2, Math.round(fit*10)/10));
+  }, 50);
+
+  if(loadedFromHash) toast('📎 تم تحميل المشروع — '+pages.length+' صفحة');
+  else toast('✓ جاهز — R/C/T/I/L لإضافة عناصر | Ctrl+[ ] للتنقل بين الصفحات');
+}
+
+// Touch pinch-to-zoom
+(function(){
+  var lastDist=0;
+  document.getElementById('canvas-area').addEventListener('touchstart',function(ev){ if(ev.touches.length===2){ lastDist=Math.hypot(ev.touches[0].clientX-ev.touches[1].clientX,ev.touches[0].clientY-ev.touches[1].clientY); ev.preventDefault(); } },{passive:false});
+  document.getElementById('canvas-area').addEventListener('touchmove',function(ev){ if(ev.touches.length===2){ ev.preventDefault(); var dist=Math.hypot(ev.touches[0].clientX-ev.touches[1].clientX,ev.touches[0].clientY-ev.touches[1].clientY); var delta=(dist-lastDist)*0.005; setZoom(zoom+delta); lastDist=dist; } },{passive:false});
+})();
+
+init();
+})();
+</script>
+</body>
+</html>
